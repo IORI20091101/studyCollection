@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/LaBi-WWW/!svn/ver/10663/trunk/Labi-2.0/labi-web/WebRoot/public/core/js/lib/comet
+END
+labi-comet.js
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/LaBi-WWW/!svn/ver/10420/trunk/Labi-2.0/labi-web/WebRoot/public/core/js/lib/comet/labi-comet.js
+END
+socket.io.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/LaBi-WWW/!svn/ver/10663/trunk/Labi-2.0/labi-web/WebRoot/public/core/js/lib/comet/socket.io.js
+END
