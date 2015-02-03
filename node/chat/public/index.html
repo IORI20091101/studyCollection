@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Websocket example</title>
+    </head>
+    <body>
+        <h1>this is an websocket example</h1>
+        <img src="/static/images/r1.jpg"/>
+        <ul>
+
+        </ul>
+
+        <script type="text/javascript" src="/static/js/jquery-1.11.2.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript">
+            var socket = io.connect('http://localhost:3030');
+
+            socket.on('news', function (data){
+               console.log(data);
+               socket.emit('anotherNews', {"name":"dongzhi"});
+            });
+
+        </script>
+    </body>
+</html>
