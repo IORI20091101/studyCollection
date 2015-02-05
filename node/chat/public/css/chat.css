@@ -1,0 +1,40 @@
+.content {
+    width: 1200px;
+    margin: 0 auto;
+}
+body {
+    background-image: url(/static/images/bg.png);
+    margin: 0;
+    font-family: Ubuntu,Tahoma,sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #fff;
+}
+.header {
+    margin-top: 30px;
+}
+
+.header img {
+    float: left;
+    width: 80px;
+    height: 80px;
+}
+
+.side {
+    border: 1px solid #fff;
+    height: 500px;
+}
+.main-content {
+    border: 1px solid #fff;
+    height: 500px;
+}
+
+.top-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.top-note {
+    font-size: 16px;
+    margin-top: 10px;
+}
