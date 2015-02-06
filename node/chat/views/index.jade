@@ -4,20 +4,53 @@ block head
   link(rel='stylesheet', href='/static/css/chat.css')
 
 block main-container
-  div.content
-    div.container-fluid
-      div.header.row-fluid
-          div.span5
-            div.row-fluid
-              div.span2
-                img(src='/static/images/r1.jpg', width='80', height='80')
-              div.span2
-                div.top-title beijit
-                div.top-note balabal
-          div.span10.top-con
+  div.content-con
+    div.content
+      div.container-fluid
+        div.header.row-fluid
+            div.span5
+              div.row-fluid
+                div.span2
+                  img(src='/static/images/r1.jpg', width='80', height='80')
+                div.span2
+                  div.top-title beijit
+                  div.top-note balabal
+            div.span10.top-con
 
-    div.container-fluid
-      div.row-fluid
-        div.span2.side sidbar
-        div.span10.main-content content
+      div.container-fluid.talk-con
+        div.row-fluid
+          div.span2.side
+              div.ul.sideNav
+                li
+                  a(href="#")
+                    img.sideIcon(width="25", height="25",src="/static/images/r1.jpg")
+                    span 123456
+                li
+                  a(href="#")
+                    img.sideIcon(width="25", height="25",src="/static/images/r1.jpg")
+                    span 123456
+                li
+                  a(href="#")
+                    img.sideIcon(width="25", height="25",src="/static/images/r1.jpg")
+                    span 123456
+          div.span10.main-content
+            div
+              div.tab-main-top
+                ul.talk-container
+                  li.talk-item-li
+                    div.talk-item
+                      div.arrow 孙东芝:
+                      div.talk-item-pop And here's some amazing content. It's very engaging. right?
+                  li.talk-item-li
+                    div.talk-item
+                      div.arrow 孙东芝:
+                      div.talk-item-pop And here's some amazing content. It's very engaging. right?
+                  li.talk-item-li.talk-item-li-right
+                    div.talk-item.talk-item-right
+                      div.arrow 我:
+                      div.talk-item-pop.talk-item-pop-right And here's some amazing content. It's very engaging. right?
+              div.tab-main-bot
+                .input-append
+                  input.input-xxlarge(type="text")
+                  button.btn.btn-info(type="submit") 发送
 
