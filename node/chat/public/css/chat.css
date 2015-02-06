@@ -60,20 +60,22 @@ body {
 
 }
 
-.sideNav li {
+.sideNav .li-item {
     list-style: none;
     height: 45px;
     line-height: 45px;
-    margin-top: 5px;
+    margin: 5px auto;
+    width: 160px;
+
 
 }
 
-.sideNav li a:hover {
+.sideNav .li-item a:hover {
     cursor: pointer;
     color: #fff;
     background: #2ea7e0;
 }
-.sideNav li a{
+.sideNav .li-item a{
     color:#545454;
     display: inline-block;
     height: 100%;
