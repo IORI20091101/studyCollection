@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng-controller="logController">
+    <head>
+        <meta charset="utf-8"/>
+        <title>
+            ceshi angularjs
+        </title>
+        <link rel="stylesheet" type="text/css" href="css/one.css"/>
+    </head>
+    <body>
+        <div>
+           <label>Name:</label>
+           <input type="text" ng-model="name" placeholder="Enter a name here">
+           <hr>
+           <h1>Hello {{name}}!</h1>
+           {{ "lower cap string" | uppercase }}
+{{ {foo: "bar", baz: 23} | json }}
+{{ 1304375948024 | date }}
+
+           {{ 1304375948024 | date:"MM/dd/yyyy @ h:mma" }}
+        </div>
+
+    </body>
+    <script type="text/javascript" data-main="config"  src="vender/require.js"></script>
+    <script>
+        require(['scripts/index'], function() {
+
+        });
+    </script>
+</html>

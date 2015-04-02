@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>测试拖拽</title>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <th>1</th>
+                <th>1</th>
+                <th>1</th>
+            </thead>
+            <tbody id="items">
+                <tr>
+                    <td>item 1</td>
+                    <td>item 1</td>
+                    <td>item 1</td>
+
+                </tr>
+                <tr>
+                    <td>item 2</td>
+                    <td>item 2</td>
+                    <td>item 2</td>
+                </tr>
+                <tr>
+                    <td>item 3</td>
+                    <td>item 3</td>
+                    <td>item 3</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+    <script src="Sortable.js"></script>
+    <script>
+        var el = document.getElementById('items');
+        var sortable = Sortable.create(el);
+
+    </script>
+</html>
