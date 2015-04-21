@@ -19,15 +19,15 @@
         require('time-grunt')(grunt);
 
         // Define the configuration for all the tasks
+
+        var appConfig = {
+            app: require('./bower.json').appPath || 'app',
+            dist: 'dist'
+        };
         grunt.initConfig({
 
             // Project settings
-            yeoman: {
-                // configurable paths
-                app: require('./bower.json').appPath || 'app',
-                dist: 'dist'
-            },
-
+            yeoman: appConfig,
             // Watches files for changes and runs tasks based on the changed files
             watch: {
                 js: {
@@ -41,9 +41,9 @@
                     files: ['test/spec/{,*/}*.js'],
                     tasks: ['newer:jshint:test', 'karma']
                 },
-                compass: {
-                    files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                    tasks: ['compass:server', 'autoprefixer']
+                styles: {
+                    files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
+                    tasks: ['newer:copy:styles', 'autoprefixer']
                 },
                 gruntfile: {
                     files: ['Gruntfile.js']
@@ -74,7 +74,21 @@
                         base: [
                             '.tmp',
                             '<%= yeoman.app %>'
-                        ]
+                        ],
+                        middleware: function (connect) {
+                            return [
+                              connect.static('.tmp'),
+                              connect().use(
+                                '/bower_components',
+                                connect.static('app/bower_components')
+                              ),
+                              connect().use(
+                                '/app/styles',
+                                connect.static('app/styles')
+                              ),
+                              connect.static(appConfig.app)
+                            ];
+                        }
                     }
                 },
                 test: {
@@ -84,7 +98,18 @@
                             '.tmp',
                             'test',
                             '<%= yeoman.app %>'
-                        ]
+                        ],
+                        middleware: function (connect) {
+                            return [
+                              connect.static('.tmp'),
+                              connect.static('test'),
+                              connect().use(
+                                '/bower_components',
+                                connect.static('app/bower_components')
+                              ),
+                              connect.static(appConfig.app)
+                            ];
+                        }
                     }
                 },
                 dist: {
@@ -134,6 +159,17 @@
                 options: {
                     browsers: ['last 1 version']
                 },
+                server: {
+                    options: {
+                      map: true,
+                    },
+                    files: [{
+                      expand: true,
+                      cwd: '.tmp/styles/',
+                      src: '{,*/}*.css',
+                      dest: '.tmp/styles/'
+                    }]
+                },
                 dist: {
                     files: [
                         {
@@ -145,7 +181,29 @@
                     ]
                 }
             },
-
+            // Automatically inject Bower components into the app
+            wiredep: {
+              app: {
+                src: ['<%= yeoman.app %>/index.html'],
+                ignorePath:  /\.\.\//
+              },
+              test: {
+                devDependencies: true,
+                src: '<%= karma.unit.configFile %>',
+                ignorePath:  /\.\.\//,
+                fileTypes:{
+                  js: {
+                    block: /(([\s\t]*)\/{2}\s*?bower:\s*?(\S*))(\n|\r|.)*?(\/{2}\s*endbower)/gi,
+                      detect: {
+                        js: /'(.*\.js)'/gi
+                      },
+                      replace: {
+                        js: '\'{{filePath}}\','
+                      }
+                    }
+                  }
+              }
+            },
             // Automatically inject Bower components into the app
             'bower': {
                 install: {
@@ -297,7 +355,7 @@
                                 '.htaccess',
                                 '*.html',
                                 'views/{,*/}*.html',
-                                'bower_components/**/*',
+                                'app/bower_components/**/*',
                                 'images/{,*/}*.{webp}',
                                 'fonts/*'
                             ]
@@ -321,13 +379,13 @@
             // Run some tasks in parallel to speed up the build process
             concurrent: {
                 server: [
-                    'compass:server'
+                    'copy:styles'
                 ],
                 test: [
-                    'compass'
+                    'copy:styles'
                 ],
                 dist: [
-                    'compass:dist',
+                    'copy:styles',
                     'imagemin',
                     'svgmin'
                 ]

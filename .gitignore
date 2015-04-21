@@ -6,3 +6,6 @@ app/bower_components
 js/angular-requirejs-seed/app/bower_components
 .idea/
 .DS_Store
+java/.DS_Store
+js/.DS_Store
+.DS_Store
