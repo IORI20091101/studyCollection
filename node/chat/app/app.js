@@ -20,13 +20,18 @@ app.set('view engine', 'jade');
 
 app.get('/', function (req, res) {
   //res.redirect('/static/index.html');
-  res.sendfile(__dirname+'/public/views/index.html');
-  /*var view = 'index';
+  //res.sendfile(__dirname+'/public/views/index.html');
+  var view = 'index';
   res.render(view, {
 
-  });*/
+  });
 });
 
+
+app.get('/test', function (req, res) {
+  //res.redirect('/static/views/html/index.html');
+  res.sendfile(__dirname+'/public/views/html/index.html');
+});
 
 
 io.on('connection', function (socket) {
