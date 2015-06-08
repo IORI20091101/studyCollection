@@ -8,11 +8,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title></title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-        <link rel="stylesheet" href="/static/styles/core/normalize.css">
+        <link rel="stylesheet" href="/static/styles/core/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="/static/styles/core/bootstrap.min.css">
         <link rel="stylesheet" href="/static/styles/core/main.css">
         <link rel="stylesheet" href="/static/styles/index.css">
         <script src="/static/scripts/core/modernizr-2.6.2.min.js"></script>
@@ -22,13 +22,127 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- Add your site or application content here -->
-        <p>Hello world! This is HTML5 Boilerplate.</p>
 
+        <!-- Add your site or application content here -->
+        <nav class="navbar navbar-default">
+            <div class="container">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand header-icon" href="#">Toshiba聊天室</a>
+              </div>
+              <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                  <li class="active"><a href="#">Home</a></li>
+                  <li><a href="#about">About</a></li>
+                  <li><a href="#contact">Contact</a></li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li class="divider"></li>
+                      <li class="dropdown-header">Nav header</li>
+                      <li><a href="#">Separated link</a></li>
+                      <li><a href="#">One more separated link</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+
+
+
+        <div class="container main-container">
+
+          <div class="row row-offcanvas row-offcanvas-right">
+
+            <div class="col-xs-12 col-sm-9 chat-con">
+                <p class="pull-right visible-xs">
+                    <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+                </p>
+                <div class="jumbotron chat-detail">
+                    <div class="chat-item">
+                        <h4 class="chat-user">【崔世菊】2015/6/8 17:08</h4>
+                        <p class="chat-info">This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport sizes to see it in action.</p>
+                    </div>
+
+                    <div class="chat-item">
+                        <h4 class="chat-user chat-self">【孙东芝】2015/6/8 17:08</h4>
+                        <p class="chat-info">This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport sizes to see it in action.</p>
+                    </div>
+
+
+
+
+                </div>
+
+                <form class="form-horizontal">
+                  <div class="form-group form-group-lg">
+                    <div class="col-sm-10">
+                      <input class="form-control" type="text" id="formGroupInputLarge" placeholder="消息">
+                    </div>
+                    <button type="submit" class="btn btn-info btn-lg btn-padding-45">发送</button>
+                  </div>
+                </form>
+            </div><!--/.col-xs-12.col-sm-9-->
+
+            <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+              <div class="list-group">
+                <a href="#" class="list-group-item active">主页</a>
+                <a href="#" class="list-group-item">function1</a>
+                <a href="#" class="list-group-item">function2</a>
+                <a href="#" class="list-group-item">function3</a>
+                <a href="#" class="list-group-item">function4</a>
+              </div>
+            </div><!--/.sidebar-offcanvas-->
+          </div><!--/row-->
+
+          <hr>
+
+          <footer>
+            <p>© Toshiba 2015</p>
+          </footer>
+
+        </div>
+
+
+        <!--对话框-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">提示</h4>
+              </div>
+              <div class="modal-body">
+                <div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="control-label">请输入姓名:</label>
+                    <input type="text" class="form-control" id="recipient-name">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary input-username">确定</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--对话框-->
 
         <script src="/static/vender/jquery/jquery-2.1.4.min.js"></script>
-        <script src="/static/scripts/core/plugins.js"></script>
-        <script src="/static/scripts/core/main.js"></script>
+        <script src="/static/scripts/core/bootstrap.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/static/scripts/index.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

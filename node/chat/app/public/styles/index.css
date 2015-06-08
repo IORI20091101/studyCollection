@@ -6,3 +6,54 @@ html {
   -moz-background-size: cover;
   background-size: cover;
 }
+body {
+    background-color: transparent;
+}
+
+footer {
+    color: #000;
+    font-size: 25px;
+}
+.header-icon {
+    color: #333;
+    text-decoration: none;
+    font-size: 36px;
+    text-shadow: 5px 4px 7px #555;
+}
+
+.chat-con {
+    min-height: 800px;
+    height: 800px;
+    height:auto!important;
+    overflow: hidden;
+}
+
+.container .chat-detail {
+    height: 600px;
+    overflow:auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.sidebar-offcanvas {
+
+}
+.btn-padding-45 {
+    padding-left:45px;
+    padding-right:45px;
+}
+
+.chat-user {
+    color: #2db2f3;
+}
+
+.chat-self {
+    color: #32CD32;
+}
+.jumbotron .chat-info {
+    padding-left: 20px;
+    font-size: 18px;
+    font-weight: normal;
+}
+.dialog-btn {
+    display: none;
+}
