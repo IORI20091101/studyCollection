@@ -8,9 +8,13 @@ var io = require('socket.io')(server);
 
 server.listen(3030);
 
+//theme start--------------------
+var colors = require('colors');
+//theme start--------------------
+var _ = require('underscore');
 
 var path = require('path');
-console.info(__dirname);
+console.info(__dirname.rainbow);
 app.use('/static', express.static(__dirname + '/public'));
 
 app.set('views', path.join(__dirname, 'public/views'));
@@ -34,10 +38,32 @@ app.get('/test', function (req, res) {
 });
 
 
+
+var serverUserArr = [];
 io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('anotherNews', function (data) {
-    console.log(data);
+  sendServerNews(socket,{isConnect: true});
+
+  socket.on('addUser', function (data) {
+
+    var isUserExist = _.indexOf(serverUserArr, data.user) >= 0? true:false;
+    if( !isUserExist ) {
+      serverUserArr.push(data.user);
+      sendServerNews(socket,{isAdd: true, user: data.user});
+    } else {
+      sendServerNews(socket,{hasExist: true, user: data.user});
+    }
+
   });
+
+  socket.on("webNews", function(data) {
+    socket.broadcast.emit("broad news",data);
+    //sendServerNews(socket,data)
+  });
+
 });
+
+
+function sendServerNews(socket,opts) {
+  socket.emit('serverNews', opts);
+}
 
