@@ -39,16 +39,19 @@ app.get('/test', function (req, res) {
 
 
 
-var serverUserArr = [];
+var users = [];
 io.on('connection', function (socket) {
   sendServerNews(socket,{isConnect: true});
 
-  socket.on('addUser', function (data) {
+  socket.on('login', function (data) {
 
-    var isUserExist = _.indexOf(serverUserArr, data.user) >= 0? true:false;
+    var isUserExist = _.indexOf(users, data.user) >= 0? true:false;
     if( !isUserExist ) {
-      serverUserArr.push(data.user);
-      sendServerNews(socket,{isAdd: true, user: data.user});
+      socket.userIndex = users.length;
+      users.push(data.user);
+      console.log(data.user + " 加入聊天室！");
+
+      sendServerEmitNews(socket,{isAdd: true, user: data.user});
     } else {
       sendServerNews(socket,{hasExist: true, user: data.user});
     }
@@ -56,14 +59,32 @@ io.on('connection', function (socket) {
   });
 
   socket.on("webNews", function(data) {
-    socket.broadcast.emit("broad news",data);
-    //sendServerNews(socket,data)
+    sendServerEmitNews(socket, data);
+  });
+
+  socket.on('disconnect', function() {
+      if( !users[socket.userIndex] ) {
+        return false;
+      }
+      //通知除自己以外的所有人
+      sendServerEmitNews(socket,{logOut: true,user: users[socket.userIndex]});
+
+      console.log(users[socket.userIndex] + " 离开聊天室！");
+      //将断开连接的用户从users中删除
+      users.splice(socket.userIndex, 1);
   });
 
 });
 
 
+//向某个链接用户发送消息
 function sendServerNews(socket,opts) {
   socket.emit('serverNews', opts);
 }
+
+//向所有用户发送消息
+function sendServerEmitNews(socket,opts) {
+  socket.broadcast.emit('broadNews', opts);
+}
+
 
