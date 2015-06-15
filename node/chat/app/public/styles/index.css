@@ -53,6 +53,7 @@ footer {
     padding-left: 20px;
     font-size: 18px;
     font-weight: normal;
+    word-wrap: break-word;
 }
 .dialog-btn {
     display: none;

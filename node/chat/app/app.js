@@ -46,12 +46,16 @@ io.on('connection', function (socket) {
   socket.on('login', function (data) {
 
     var isUserExist = _.indexOf(users, data.user) >= 0? true:false;
+    if( !data.user ) {
+      console.log("请输入合法的用户名，“” or underfined or null 不被允许！");
+      return false;
+    }
     if( !isUserExist ) {
       socket.userIndex = users.length;
       users.push(data.user);
       console.log(data.user + " 加入聊天室！");
 
-      sendServerEmitNews(socket,{isAdd: true, user: data.user});
+      sendServerEmitNews(socket,{isAdd: true, user: data.user, users: users});
     } else {
       sendServerNews(socket,{hasExist: true, user: data.user});
     }
@@ -67,7 +71,7 @@ io.on('connection', function (socket) {
         return false;
       }
       //通知除自己以外的所有人
-      sendServerEmitNews(socket,{logOut: true,user: users[socket.userIndex]});
+      sendServerEmitNews(socket,{logOut: true,user: users[socket.userIndex], users: users});
 
       console.log(users[socket.userIndex] + " 离开聊天室！");
       //将断开连接的用户从users中删除

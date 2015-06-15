@@ -46,12 +46,15 @@
                     if( data.isAdd ) {
                         self.utils.logColor( data.user +"加入聊天室！");
                         self.utils.showInfoTips(data.user + "加入聊天室！");
+
+                        self.utils.onlineChanges(data.users);
                         return false;
                     }
 
                     if( data.logOut ) {
                         self.utils.logColor( data.user +"离开聊天室！");
                         self.utils.showInfoTips(data.user + "离开聊天室！");
+                        self.utils.onlineChanges(data.users);
                         return false;
                     }
 
@@ -64,8 +67,13 @@
             //登录时，向服务器添加新用户
             addUser: function addUser(socket) {
                 var self = this;
+                if( self.localUser == "" ) {
+                    return false;
+                }
                 socket.emit('login', { user: self.localUser });
                 $(".userName").text(self.localUser);
+
+                self.utils.onlineChanges([self.localUser]);
             },
             //当向服务器发送消息时
             sendNews: function sendNews(opts) {
@@ -214,6 +222,34 @@
 
                     var tmplHtml = juicer(tmpl, opts);
                     $(".chat-detail").append(tmplHtml);
+
+
+                    var hei = 0;
+                    $(".chat-item").each(function(i, item) {
+                        var $item = $(item);
+                        hei = hei + $item.height();
+                    });
+
+                    var throttled = _.throttle(function() {
+                        $(".chat-detail").animate({scrollTop: (hei + 500)+'px'}, 100);
+                    }, 200);
+
+                    throttled();
+
+
+                },
+                //如果用户自己进入则boo为false否则为true
+                onlineChanges: function onlineChanges(users) {
+                    console.log(users);
+                    $(".online-num").text(users.length);
+                    var tmplHTML = [
+                        '{@each users as user}',
+                            '<a href="#" class="list-group-item">${user}</a>',
+                        '{@/each}'
+                    ].join("");
+                    var html = juicer(tmplHTML, {users : users});
+                    $(".list-group").html(html);
+
                 },
                 //检测用户名是否存在
                 checkUsername: function checkUsername(localUser,fn) {
