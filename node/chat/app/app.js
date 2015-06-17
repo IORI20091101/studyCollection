@@ -51,11 +51,13 @@ io.on('connection', function (socket) {
       return false;
     }
     if( !isUserExist ) {
-      socket.userIndex = users.length;
       users.push(data.user);
+      socket.userIndex = users.length;
       console.log(data.user + " 加入聊天室！");
 
-      sendServerEmitNews(socket,{isAdd: true, user: data.user, users: users});
+      //console.log("users:" + users);
+      //sendServerEmitNews(socket,{isAdd: true, user: data.user, users: users});
+      io.sockets.emit('broadNews', {isAdd: true, user: data.user, users: users});
     } else {
       sendServerNews(socket,{hasExist: true, user: data.user});
     }
@@ -66,16 +68,22 @@ io.on('connection', function (socket) {
     sendServerEmitNews(socket, data);
   });
 
+  socket.on("img", function(data) {
+    socket.broadcast.emit('newImg', data);
+  });
+
   socket.on('disconnect', function() {
-      if( !users[socket.userIndex] ) {
+      if( !users[socket.userIndex - 1] ) {
         return false;
       }
-      //通知除自己以外的所有人
-      sendServerEmitNews(socket,{logOut: true,user: users[socket.userIndex], users: users});
 
-      console.log(users[socket.userIndex] + " 离开聊天室！");
       //将断开连接的用户从users中删除
-      users.splice(socket.userIndex, 1);
+      users.splice((socket.userIndex-1), 1);
+
+      console.log(users[socket.userIndex - 1] + " 离开聊天室！");
+       //通知除自己以外的所有人
+      sendServerEmitNews(socket,{logOut: true,user: users[socket.userIndex - 1], users: users});
+      //console.log("users:" + users);
   });
 
 });

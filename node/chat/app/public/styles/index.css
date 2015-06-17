@@ -82,3 +82,7 @@ footer {
   width: 1200px;
   display: none;
 }
+
+.imgNews {
+  max-width: 90%;
+}

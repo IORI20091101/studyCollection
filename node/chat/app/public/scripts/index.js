@@ -63,6 +63,13 @@
                         self.utils.addChatItem(data);
                     }
                 })
+
+                socket.on("newImg", function(data) {
+                    //有新的聊天消息
+                    if( data.user != null && data.user != "") {
+                        self.utils.addChatItem(data);
+                    }
+                })
             },
             //登录时，向服务器添加新用户
             addUser: function addUser(socket) {
@@ -173,6 +180,39 @@
                     self.utils.addChatItem(_.extend(opts, {localUser: self.localUser}));
 
                 });
+
+                //发送图片
+                $("#sendImage").on('change' ,function() {
+                    //检查是否有文件被选中
+                    var $this = $(this);
+                     if ($this[0].files.length != 0) {
+                        //获取文件并用FileReader进行读取
+                        var file = $this[0].files[0],
+                            reader = new FileReader();
+                        if (!reader) {
+                            self.utils.showInfoTips("!your browser doesn\'t support fileReader");
+                            this.value = '';
+                            return;
+                        };
+                        reader.onload = function(e) {
+                            //读取成功，显示到页面并发送到服务器
+                            this.value = '';
+                            //发送给服务器
+
+                            var d = new Date();
+                            var opts = {
+                                user: self.localUser,
+                                info: "",
+                                imgData: e.target.result,
+                                date: d.getFullYear() + "/" + self.utils.addZero(d.getMonth() + 1) + "/" + self.utils.addZero(d.getDate()) + " " + self.utils.addZero(d.getHours())+":"+self.utils.addZero(d.getMinutes())
+                            }
+                            self.socket.emit('img', opts);
+                            //自己显示图片
+                            //that._displayImage('me', e.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                     };
+                })
             },
             //工具类方法
             utils: {
@@ -216,7 +256,7 @@
                     var tmpl = [
                         '<div class="chat-item">',
                             '<h4 class="chat-user {@if user == localUser}chat-self{@/if}">【${user}】${date}</h4>',
-                            '<p class="chat-info">${info}</p>',
+                            '<p class="chat-info">${info} {@if imgData}<img class="imgNews" src="${imgData}" />{@/if}</p>',
                         '</div>'
                     ].join("");
 
