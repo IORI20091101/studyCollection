@@ -208,10 +208,11 @@
                             }
                             self.socket.emit('img', opts);
                             //自己显示图片
-                            //that._displayImage('me', e.target.result);
+                            self.utils.addChatItem(opts);
                         };
                         reader.readAsDataURL(file);
                      };
+
                 })
             },
             //工具类方法
@@ -256,7 +257,7 @@
                     var tmpl = [
                         '<div class="chat-item">',
                             '<h4 class="chat-user {@if user == localUser}chat-self{@/if}">【${user}】${date}</h4>',
-                            '<p class="chat-info">${info} {@if imgData}<img class="imgNews" src="${imgData}" />{@/if}</p>',
+                            '<p class="chat-info">${info} {@if imgData}<a href="${imgData}" target="_blank"><img class="imgNews" src="${imgData}" /></a>{@/if}</p>',
                         '</div>'
                     ].join("");
 
