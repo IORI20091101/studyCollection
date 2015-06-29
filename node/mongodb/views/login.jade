@@ -3,9 +3,11 @@ block body
     form(action="/login", method="POST")
         fieldset
             legend Log in
+            if(signupEmail)
+                p Congratulation on sign up please login blew
             p
                 label Email
-                input(name="user[email]", type="text")
+                input(name="user[email]", type="text" value=signupEmail)
             p
                 label Password
                 input(name="user[password]", type="password")
