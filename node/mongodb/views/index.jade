@@ -1,6 +1,6 @@
 extends ./layout
 block body
-    if(authenticated)
+    if authenticated
         p Welcome back, #{me.first}
         a(href="/logout") logout
     else

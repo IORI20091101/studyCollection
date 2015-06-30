@@ -57,15 +57,20 @@ app.listen(3030, function() {
 
 //中间件
 app.use(function(req, res, next) {
+    res.locals({test:'hellosss'});
     if(req.session.loggedIn) {
-        res.locals('authenticated', true);
-        app.users.findOne({_id: {$oid: req.session.loggedIn}},function(err, results) {
-            if( err ) return next(err);
-            res.local('me',results);
+        res.locals({'authenticated': true});
+        console.log(req.session.loggedIn);
+
+        app.users.findOne({_id:ObjectId(req.session.loggedIn)},{password:0}, function(err, results) {
+            console.log(results);
+            if (err) return next(err);
+            res.locals({'me':results});
             next();
-        })
+
+        });
     } else {
-        res.locals('authenticated', false);
+        res.locals({'authenticated': false});
         next();
     }
 
@@ -92,8 +97,8 @@ app.get('/signup', function(req, res) {
 app.post('/login', function(req, res, next) {
     var email = req.body.user.email;
     var password = req.body.user.password;
-    console.log(email);
-    console.log(password);
+    //console.log(email);
+    //console.log(password);
 
 
     app.users.findOne({email:email,password:password}, function(err, results) {
@@ -101,7 +106,7 @@ app.post('/login', function(req, res, next) {
         if(!results) {
             return res.send('<p>User not found, Go back and try again</p>');
         }
-        console.log(results)
+        //console.log(results)
         req.session.loggedIn = results._id.toString();
         res.redirect('/');
     });
