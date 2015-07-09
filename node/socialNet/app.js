@@ -1,22 +1,32 @@
 var express = require('express');
 var expressMongoose = require('express-mongoose');
 var app = express();
+var nodemailer = require('nodemailer');
 
+var config = {
+    mail: require('./config/mail')
+}
 
 var mongoose = require('mongoose');
 var path = require('path');
-mongoose.connect('mongodb://localhost/mydb');
-app.use(express.bodyParser());
-app.use(express.cookieParser());
-app.use(express.session({secret:'my secret'}));
+var Account = require('./models/Account')(config, mongoose, nodemailer);
 
 
-app.set('views',__dirname + '/views');
+app.configure(function() {
+    app.set('view engine', 'jade');
+    app.set('views', path.join(__dirname, '/views'));
+    app.use('/static', express.static(__dirname + '/public'));
+    app.use(express.limit('1mb'));
+    app.use(express.bodyParser());
+    app.use(express.cookieParser());
+
+    app.use(express.session({secret:'Social secret key', store: newMemoryStore()}));
+    mongoose.connect('mongodb://localhost/mydb');
 
 
-app.use('/static', express.static(__dirname + '/public'));
-app.set('views', path.join(__dirname, '/views'));
-app.set('view engine', 'jade');
+});
+
+
 
 
 
@@ -77,7 +87,7 @@ app.post('/login', function(req, res) {
     });
 });
 
-//忘记密码请求处理
+//ajax忘记密码请求处理
 app.post('/forgotpasword', function(req, res) {
     var hostname = req.headers.host;
     var resetPasswordUrl = 'http://' + hostname + '/resetPassword';
@@ -95,3 +105,18 @@ app.post('/forgotpasword', function(req, res) {
         }
     });
 });
+
+//忘记密码同步跳转
+app.get('/resetPassword', function(req, res) {
+    var accountId = req.param('account', null);
+    res.render('resetPassword', {locals:{accountId: accountId}});
+});
+
+app.post('/resetPassword', function(req, res) {
+    var accountId = req.param('account', null);
+    var password = req.param('password', null);
+    if( null == accountId && null != password ) {
+        Account.changePassword(accountId, password);
+    }
+    res.render('resetPasswordSuccess',{});
+})
