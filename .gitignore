@@ -1,4 +1,7 @@
 node_modules
+build
+build-requirejs
+cdn
 dist
 .tmp
 .sass-cache
