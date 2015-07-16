@@ -95,24 +95,24 @@ function clean( cb ) {
 function js() {
     return gulp.src( paths.js )
         //.pipe( changed( DIST ) )
-        //.pipe( minifyJS() )
+        .pipe( minifyJS() )
         .pipe( gulp.dest( DIST ) );
 }
 
 function css() {
     return gulp.src( paths.cssFiles )
         //.pipe( changed( DIST ) )
-        //.pipe( minifyCSS() )
+        .pipe( minifyCSS() )
         .pipe( gulp.dest( DIST ) );
 }
 
 function html() {
     return gulp.src( paths.htmlFiles , { base : REQUIREJS } )
         //.pipe( changed( DIST ) )
-        /*.pipe( minifyHTML( {
+        .pipe( minifyHTML( {
             removeComments : true ,
             collapseWhitespace : true
-        } ) )*/
+        } ) )
         .pipe( gulp.dest( DIST ) );
 }
 function copy() {

@@ -1,14 +1,17 @@
-define(['scripts/config.js'], function() {
-    require(['a'], function(a) {
+define(['require','scripts/a','scripts/config.js'], function(require, a) {
+    /*require(['a'], function(a) {
+
+
+    })*/
+    //var a = require('a');
+
         alert("success get a");
         a.a();
-
-    })
 
         function index() {
             console.log("you has enter index page");
         }
 
 
-        return index;
+        index();
 });

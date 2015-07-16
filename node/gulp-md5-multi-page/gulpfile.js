@@ -5,14 +5,14 @@ var SRC        = 'app/public' ,
 
     // 如果不是假值，那么这个值会作为 cdn 前缀追加到需要加载的文件里。
     // 注意：最后面的斜线 / 一定要加上
-    CDN_PREFIX = 'http://localhost:3030/' ,
+    CDN_PREFIX = 'http://127.0.0.1/' ,
     //CDN_PREFIX = 'http://localhost:61111/angularjs-requirejs-rjs-md5/cdn/' ,
     //CDN_PREFIX = false ,
     paths      = {
 
         // 默认情况下所有 js 文件都是由 requireJS 加载的是不需要加前缀的，所以这里要列出不是由 requireJS 加载的 js 文件
         //改文件路径会在更改所有文件引用时被获得，可以过滤出不希望改变的文件
-        jsNotLoadByRequireJS : [ 'scripts/boot.js' , 'vendor/require.js','scripts/config.js' ] ,
+        jsNotLoadByRequireJS : ['vendor/require.js' ] ,
 
         // 默认情况下所有 css 文件都是要加前缀的，但是由 requireJS 加载的 css 文件不用加
         cssLoadByRequireJS : [ /^styles\/.*/ ] ,
@@ -97,24 +97,24 @@ function clean( cb ) {
 function js() {
     return gulp.src( paths.js )
         //.pipe( changed( DIST ) )
-        .pipe( minifyJS() )
+        //.pipe( minifyJS() )
         .pipe( gulp.dest( DIST ) );
 }
 
 function css() {
     return gulp.src( paths.cssFiles )
         //.pipe( changed( DIST ) )
-        .pipe( minifyCSS() )
+        //.pipe( minifyCSS() )
         .pipe( gulp.dest( DIST ) );
 }
 
 function html() {
     return gulp.src( paths.htmlFiles , { base : REQUIREJS } )
         //.pipe( changed( DIST ) )
-        .pipe( minifyHTML( {
+        /*.pipe( minifyHTML( {
             removeComments : true ,
             collapseWhitespace : true
-        } ) )
+        } ) )*/
         .pipe( gulp.dest( DIST ) );
 }
 function copy() {
@@ -153,9 +153,9 @@ function requirejs( done ) {
             'index':['backbone']
         },
         modules: [
-            {
-                name:'scripts/config'
-            }
+            /*{
+                name:'scripts/index'
+            }*/
         ],
         logLevel : 1
     } , function () {

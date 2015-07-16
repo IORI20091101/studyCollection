@@ -1,4 +1,4 @@
-define(['b'], function (b) {
+define(['scripts/b'], function (b) {
     alert('success get b');
     b.b();
     function a() {

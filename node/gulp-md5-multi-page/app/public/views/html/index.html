@@ -32,9 +32,9 @@
 
         <script src="/vendor/require.js"></script>
         <script>
-            require(['/scripts/index.js'], function(index) {
-                console.log(index);
-                index();
+
+            require(['/scripts/config.js'], function() {
+                require(['/scripts/index.js']);
             });
         </script>
 
