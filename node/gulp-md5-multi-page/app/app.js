@@ -14,24 +14,17 @@ var _ = require('underscore');
 var path = require('path');
 
 
-app.use('/static', express.static(__dirname + '/cdn'));
+app.use('/', express.static(__dirname + '/cdn'));
 
-app.set('views', path.join(__dirname, 'public/views'));
+app.set('views', path.join(__dirname, 'cdn/views'));
 
 app.set('view engine', 'jade');
 
 
 app.get('/', function (req, res) {
   //res.redirect('/static/views/html/index.html');
-  res.sendfile(__dirname+'/public/views/html/test.html');
+  res.sendfile(__dirname+'/cdn/views/html/index.html');
 });
-
-app.get('/test', function (req, res) {
-  //res.redirect('/static/views/html/index.html');
-  res.sendfile(__dirname+'/public/views/html/test1.html');
-});
-
-
 
 
 

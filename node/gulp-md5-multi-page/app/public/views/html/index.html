@@ -30,7 +30,13 @@
         </div>
 
 
-        <script data-main="/static/scripts/boot" src="/static/scripts/libs/require.js"></script>
+        <script src="/vendor/require.js"></script>
+        <script>
+            require(['/scripts/index.js'], function(index) {
+                console.log(index);
+                index();
+            });
+        </script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

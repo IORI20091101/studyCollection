@@ -30,15 +30,8 @@
         </div>
 
 
-        <script src="/static/scripts/libs/require.js"></script>
-        <script>
-                requirejs(['/static/scripts/common.js'], function() {
-                    requirejs(['b'], function(b) {
-                        b.b();
-                    })
-                })
+        <script data-main="/static/scripts/boot" src="/static/vendor/require.js"></script>
 
-        </script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];

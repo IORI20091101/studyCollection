@@ -5,13 +5,13 @@ var SRC        = 'app/public' ,
 
     // 如果不是假值，那么这个值会作为 cdn 前缀追加到需要加载的文件里。
     // 注意：最后面的斜线 / 一定要加上
-    CDN_PREFIX = 'https://127.0.0.1/' ,
+    CDN_PREFIX = 'http://localhost:3030/' ,
     //CDN_PREFIX = 'http://localhost:61111/angularjs-requirejs-rjs-md5/cdn/' ,
     //CDN_PREFIX = false ,
     paths      = {
 
         // 默认情况下所有 js 文件都是由 requireJS 加载的是不需要加前缀的，所以这里要列出不是由 requireJS 加载的 js 文件
-        jsNotLoadByRequireJS : [ 'scripts/boot.js' , 'scripts/libs/require.js' ] ,
+        jsNotLoadByRequireJS : [ 'scripts/boot.js' , 'vendor/require.js' ] ,
 
         // 默认情况下所有 css 文件都是要加前缀的，但是由 requireJS 加载的 css 文件不用加
         cssLoadByRequireJS : [ /^styles\/.*/ ] ,
@@ -22,6 +22,7 @@ var SRC        = 'app/public' ,
         cssFiles : [ REQUIREJS + '/**/*.css' ] ,
         htmlFiles : REQUIREJS + '/**/*.html' ,
         imageFiles : REQUIREJS + '/**/*.{png,jpg,gif}' ,
+        //传入gulp.src 的参数需要格式为vinyl-fs 的流文件，参数格式为['./js/**/*.js', '!./js/vendor/*.js'] 所以要加！号
         copyFiles : [ REQUIREJS + '/**/*' , '!' + REQUIREJS + '/**/*.{js,css,html}' , '!' + REQUIREJS + '/build.txt' ]
     } ,
 
@@ -34,11 +35,16 @@ var SRC        = 'app/public' ,
     concat     = require( 'gulp-concat' ) ,
     deleteFile = require( 'del' ) ,
     revall     = new (require( 'gulp-rev-all' ))( {
-        dontRenameFile : [ /^\/views\/html\/\*.html$/g ] ,
+        //定义不需要重命名的文件，比如requirejs的配置文件boot.js, 服务器端配置的静态模板或者html的文件不能修改否则娶不到
+        //还有requiire文件本身，都不需要更改md5值
+        dontRenameFile : [ /^\/views\/html\/index\w*\.html$/g , /^\/fonts\/.*/g ,'vendor/require.js','scripts/boot.js'] ,
+        //这里的搜索指的是将所有引用文件的原文件名改成 修改后的md5值，比如define(['a']) ==> defind(['hash'])
         dontSearchFile : [ /^\/scripts\/libs\/.*/g ] ,
+        //修改文件名字的规则
         transformFilename : function ( file , hash ) {
             return hash + file.path.slice( file.path.lastIndexOf( '.' ) );
         } ,
+        //修改文件路径
         transformPath : function ( rev , source , file ) {
             //if ( rev !== file.revPath ) {
             //    console.log( 'debugger here' );
@@ -55,9 +61,11 @@ var SRC        = 'app/public' ,
                 ) {
                     return rev;
                 }
-
+console.log(filePath);
+console.log(ext);
+console.log(CDN_PREFIX + rev);
                 // 其他文件一律加前缀
-                return CDN_PREFIX + rev;
+                return CDN_PREFIX + filePath;
             } else {
                 return rev;
             }
@@ -66,7 +74,7 @@ var SRC        = 'app/public' ,
 
 gulp.task( 'clean' , clean );
 
-gulp.task( 'requirejs' , requirejs ); //第一步： 从 SRC 把文件合并至 REQUIREJS 文件夹
+gulp.task( 'requirejs', requirejs ); //第一步： 从 SRC 把文件合并至 REQUIREJS 文件夹
 
 // 第二步：下面四个操作是并行的，用于将 REQUIREJS 文件夹下的文件精简至 DIST 文件夹
 gulp.task( 'js' , [ 'requirejs' ] , js );
@@ -78,7 +86,7 @@ gulp.task( 'html' , [ 'requirejs' ] , html );
 gulp.task( 'copy' , [ 'requirejs' ] , copy );
 
 // 第三步：将 DIST 文件夹下的文件打上 md5 签名并输出到 CDN 文件夹
-gulp.task( 'default' , [ 'js' , 'css' , 'html' , 'copy' ] , md5 );
+gulp.task( 'default' , ['js' , 'css' , 'html' , 'copy' ] , md5 );
 
 function clean( cb ) {
     deleteFile( [ DIST , REQUIREJS , CDN ] , cb );
@@ -87,24 +95,24 @@ function clean( cb ) {
 function js() {
     return gulp.src( paths.js )
         //.pipe( changed( DIST ) )
-        .pipe( minifyJS() )
+        //.pipe( minifyJS() )
         .pipe( gulp.dest( DIST ) );
 }
 
 function css() {
     return gulp.src( paths.cssFiles )
         //.pipe( changed( DIST ) )
-        .pipe( minifyCSS() )
+        //.pipe( minifyCSS() )
         .pipe( gulp.dest( DIST ) );
 }
 
 function html() {
     return gulp.src( paths.htmlFiles , { base : REQUIREJS } )
         //.pipe( changed( DIST ) )
-        .pipe( minifyHTML( {
+        /*.pipe( minifyHTML( {
             removeComments : true ,
             collapseWhitespace : true
-        } ) )
+        } ) )*/
         .pipe( gulp.dest( DIST ) );
 }
 function copy() {
@@ -116,22 +124,37 @@ function copy() {
 function md5() {
     return gulp.src( DIST + '/**' )
         .pipe( revall.revision() )
+        .pipe( gulp.dest( CDN ) )
+        .pipe( revall.manifestFile() )
         .pipe( gulp.dest( CDN ) );
-    //.pipe( revall.manifestFile() )
-    //.pipe( gulp.dest( CDN ) );
 }
 
 function requirejs( done ) {
     var r = require( 'requirejs' );
     r.optimize( {
         appDir : SRC ,
-        baseUrl : './' ,
+        baseUrl:'./scripts/',
         dir : REQUIREJS ,
         optimize : 'none' ,
         optimizeCss : 'none' ,
         removeCombined : true ,
-        mainConfigFile : SRC + '/scripts/boot.js' ,
+        paths:{
+            jquery: '../vendor/jquery-2.1.4.min',
+            backbone:'../vendor/backbone-min',
+            underscore:'../vendor/underscore-min',
+            juicer:'../vendor/juicer-min',
+            text:'../vendor/text'
+        },
 
+        shim: {
+            'backbone':['underscore','jquery'],
+            'index':['backbone']
+        },
+        modules: [
+            {
+                name: 'boot'
+            }
+        ],
         logLevel : 1
     } , function () {
         done();
