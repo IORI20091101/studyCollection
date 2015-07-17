@@ -1,10 +1,5 @@
-define(['require','scripts/a','scripts/config.js'], function(require, a) {
-    /*require(['a'], function(a) {
-
-
-    })*/
-    //var a = require('a');
-
+requirejs(['/static/scripts/config.js'], function (common) {
+    requirejs(['a'], function(a) {
         alert("success get a");
         a.a();
 
@@ -14,4 +9,5 @@ define(['require','scripts/a','scripts/config.js'], function(require, a) {
 
 
         index();
+    });
 });

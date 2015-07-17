@@ -5,14 +5,15 @@ var SRC        = 'app/public' ,
 
     // 如果不是假值，那么这个值会作为 cdn 前缀追加到需要加载的文件里。
     // 注意：最后面的斜线 / 一定要加上
-    CDN_PREFIX = 'http://127.0.0.1/' ,
+    CDN_PREFIX = 'http://localhost:8080/static/test' ,
     //CDN_PREFIX = 'http://localhost:61111/angularjs-requirejs-rjs-md5/cdn/' ,
     //CDN_PREFIX = false ,
     paths      = {
 
         // 默认情况下所有 js 文件都是由 requireJS 加载的是不需要加前缀的，所以这里要列出不是由 requireJS 加载的 js 文件
         //改文件路径会在更改所有文件引用时被获得，可以过滤出不希望改变的文件
-        jsNotLoadByRequireJS : ['vendor/require.js' ] ,
+        //这些文件会通过 CDN_PREFIX 来加载
+        jsNotLoadByRequireJS : ['/vendor/require.js','scripts/config.js' ] ,
 
         // 默认情况下所有 css 文件都是要加前缀的，但是由 requireJS 加载的 css 文件不用加
         cssLoadByRequireJS : [ /^styles\/.*/ ] ,
@@ -38,39 +39,50 @@ var SRC        = 'app/public' ,
     revall     = new (require( 'gulp-rev-all' ))( {
         //定义不需要重命名的文件，比如requirejs的配置文件boot.js, 服务器端配置的静态模板或者html的文件不能修改否则娶不到
         //还有requiire文件本身，都不需要更改md5值
-        dontRenameFile : [ /^\/views\/html\/index\w*\.html$/g , /^\/fonts\/.*/g ,'vendor/require.js','scripts/index.js','scripts/config.js'] ,
+        dontRenameFile : [ /^\/views\/html\/index\w*\.html$/g , /^\/fonts\/.*/g ,'/scripts/require.js','scripts/index.js','scripts/config.js'] ,
         //这里的搜索指的是将所有引用文件的原文件名改成 修改后的md5值，比如define(['a']) ==> defind(['hash'])
         //具体路径的更改在transformPath方法中进行。
-        dontSearchFile : [ /^\/vendor\/.*/g, /^\/views\/html\/index\w*\.html$/g ] ,
+        dontSearchFile : [ /^\/vendor\/.*/g, /^\/views\/html\/index\w*\.html$/g] ,
         //修改文件名字的规则
         transformFilename : function ( file , hash ) {
             return hash + file.path.slice( file.path.lastIndexOf( '.' ) );
         } ,
-        //修改文件路径
+        //修改文件引用路径包括 require路径路径
         transformPath : function ( rev , source , file ) {
-            //if ( rev !== file.revPath ) {
-            //    console.log( 'debugger here' );
-            //}
-            if ( CDN_PREFIX ) {
-                var filePath = file.revPathOriginal.slice( file.base.length ).replace( /\\/g , '/' ) ,
-                    ext      = file.revFilenameExtOriginal;
+            //if( source.indexOf('index') == '.js' ) {
+                console.log("rev~~~~: " + rev);
+                console.log("source~~~~: " + source);
+                console.log("file.revPath~~~~~:" + file.revPath);
+                console.log("file.revPathOriginal~~~~~:" +file.revPathOriginal);
 
-                // 不是由 requireJS 加载的 js 文件要加前缀，由 requireJS 加载的 css 文件不要加前缀
-                if (
-                    ('.js' === ext && !matchArray( filePath , paths.jsNotLoadByRequireJS ))
-                    ||
-                    ('.css' === ext && matchArray( filePath , paths.cssLoadByRequireJS ))
-                ) {
-                    return rev;
-                }
-console.log(filePath);
-console.log(ext);
-console.log(CDN_PREFIX + filePath);
-                // 其他文件一律加前缀
-                return CDN_PREFIX + filePath;
-            } else {
-                return rev;
-            }
+
+                    if ( rev !== file.revPath ) {
+                        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+                        console.log("file.path: " + file.path);
+                        console.log("rev: "+rev)
+                        console.log( 'debugger here' );
+                    }
+                    console.log('---------------------------------')
+                    if ( CDN_PREFIX ) {
+                        var filePath = file.revPathOriginal.slice( file.base.length ).replace( /\\/g , '/' ) ,
+                            ext      = file.revFilenameExtOriginal;
+
+                        // 不是由 requireJS 加载的 js 文件要加前缀，由 requireJS 加载的 css 文件不要加前缀
+                        if (
+                            ('.js' === ext && !matchArray( filePath , paths.jsNotLoadByRequireJS ))
+                            ||
+                            ('.css' === ext && matchArray( filePath , paths.cssLoadByRequireJS ))
+                        ) {
+                            return rev;
+                        }
+        //console.log(CDN_PREFIX + filePath);
+                        // 其他文件一律加前缀
+                        return CDN_PREFIX + filePath;
+                    } else {
+                        return rev;
+                    }
+            //}
+
         }
     } );
 
@@ -125,9 +137,9 @@ function copy() {
 
 function md5() {
     return gulp.src( DIST + '/**' )
-        .pipe( revall.revision() )
-        .pipe( gulp.dest( CDN ) )
-        .pipe( revall.manifestFile() )
+        //.pipe( revall.revision() )
+        //.pipe( gulp.dest( CDN ) )
+        //.pipe( revall.manifestFile() )
         .pipe( gulp.dest( CDN ) );
 }
 
@@ -135,27 +147,26 @@ function requirejs( done ) {
     var r = require( 'requirejs' );
     r.optimize( {
         appDir : SRC ,
-        baseUrl : './' ,
+        baseUrl : './scripts' ,
         dir : REQUIREJS ,
         optimize : 'none' ,
         optimizeCss : 'none' ,
         removeCombined : true ,
         paths:{
-            jquery: 'vender/jquery-2.1.4.min',
-            backbone:'vender/backbone-min',
-            underscore:'vender/underscore-min',
-            juicer:'vender/juicer-min',
-            text:'vender/text'
+            jquery: '../vendor/jquery-2.1.4.min',
+            backbone:'../vendor/backbone-min',
+            underscore:'../vendor/underscore-min',
+            juicer:'../vendor/juicer-min',
+            text:'../vendor/text'
         },
 
         shim: {
-            'backbone':['underscore','jquery'],
-            'index':['backbone']
+            'backbone':['underscore','jquery']
         },
         modules: [
-            /*{
-                name:'scripts/index'
-            }*/
+            {
+                name:'index'
+            }
         ],
         logLevel : 1
     } , function () {

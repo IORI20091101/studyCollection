@@ -1,16 +1,14 @@
 require.config({
-    baseUrl:'/',
+    baseUrl:'/static/scripts',
     paths:{
-        jquery: 'vender/jquery-2.1.4.min',
-        backbone:'vender/backbone-min',
-        underscore:'vender/underscore-min',
-        juicer:'vender/juicer-min',
-        text:'vender/text',
-        config: 'scripts/config'
+        jquery: '../vendor/jquery-2.1.4.min',
+        backbone:'../vendor/backbone-min',
+        underscore:'../vendor/underscore-min',
+        juicer:'../vendor/juicer-min',
+        text:'../vendor/text'
     },
 
     shim: {
-        'backbone':['underscore','jquery'],
-        'index':['config']
+        'backbone':['underscore','jquery']
     }
 });
