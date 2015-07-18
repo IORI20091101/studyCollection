@@ -5,7 +5,7 @@ var SRC        = 'app/public' ,
 
     // 如果不是假值，那么这个值会作为 cdn 前缀追加到需要加载的文件里。
     // 注意：最后面的斜线 / 一定要加上
-    CDN_PREFIX = 'http://localhost:8080/static/test' ,
+    CDN_PREFIX = 'http://localhost:8080/' ,
     //CDN_PREFIX = 'http://localhost:61111/angularjs-requirejs-rjs-md5/cdn/' ,
     //CDN_PREFIX = false ,
     paths      = {
@@ -39,7 +39,7 @@ var SRC        = 'app/public' ,
     revall     = new (require( 'gulp-rev-all' ))( {
         //定义不需要重命名的文件，比如requirejs的配置文件boot.js, 服务器端配置的静态模板或者html的文件不能修改否则娶不到
         //还有requiire文件本身，都不需要更改md5值
-        dontRenameFile : [ /^\/views\/html\/index\w*\.html$/g , /^\/fonts\/.*/g ,'/scripts/require.js','scripts/index.js','scripts/config.js'] ,
+        dontRenameFile : [ /^\/views\/html\/index\w*\.html$/g , /^\/fonts\/.*/g ,'/vendor/require.js','scripts/index.js','scripts/config.js'] ,
         //这里的搜索指的是将所有引用文件的原文件名改成 修改后的md5值，比如define(['a']) ==> defind(['hash'])
         //具体路径的更改在transformPath方法中进行。
         dontSearchFile : [ /^\/vendor\/.*/g, /^\/views\/html\/index\w*\.html$/g] ,
@@ -109,14 +109,14 @@ function clean( cb ) {
 function js() {
     return gulp.src( paths.js )
         //.pipe( changed( DIST ) )
-        //.pipe( minifyJS() )
+        .pipe( minifyJS() )
         .pipe( gulp.dest( DIST ) );
 }
 
 function css() {
     return gulp.src( paths.cssFiles )
         //.pipe( changed( DIST ) )
-        //.pipe( minifyCSS() )
+        .pipe( minifyCSS() )
         .pipe( gulp.dest( DIST ) );
 }
 
@@ -137,9 +137,9 @@ function copy() {
 
 function md5() {
     return gulp.src( DIST + '/**' )
-        //.pipe( revall.revision() )
-        //.pipe( gulp.dest( CDN ) )
-        //.pipe( revall.manifestFile() )
+        .pipe( revall.revision() )
+        .pipe( gulp.dest( CDN ) )
+        .pipe( revall.manifestFile() )
         .pipe( gulp.dest( CDN ) );
 }
 
@@ -147,7 +147,7 @@ function requirejs( done ) {
     var r = require( 'requirejs' );
     r.optimize( {
         appDir : SRC ,
-        baseUrl : './scripts' ,
+        baseUrl : './scripts/' ,
         dir : REQUIREJS ,
         optimize : 'none' ,
         optimizeCss : 'none' ,
@@ -165,7 +165,8 @@ function requirejs( done ) {
         },
         modules: [
             {
-                name:'index'
+                name:'index',
+                include: 'a'
             }
         ],
         logLevel : 1
