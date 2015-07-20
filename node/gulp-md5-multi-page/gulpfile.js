@@ -123,10 +123,10 @@ function css() {
 function html() {
     return gulp.src( paths.htmlFiles , { base : REQUIREJS } )
         //.pipe( changed( DIST ) )
-        /*.pipe( minifyHTML( {
+        .pipe( minifyHTML( {
             removeComments : true ,
             collapseWhitespace : true
-        } ) )*/
+        } ) )
         .pipe( gulp.dest( DIST ) );
 }
 function copy() {
