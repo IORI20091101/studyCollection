@@ -14,7 +14,7 @@ var _ = require('underscore');
 var path = require('path');
 
 
-app.use('/static', express.static(__dirname + '/cdn'));
+app.use('/', express.static(__dirname + '/cdn'));
 
 app.set('views', path.join(__dirname, 'cdn/views'));
 

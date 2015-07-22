@@ -49,20 +49,16 @@ var SRC        = 'app/public' ,
         } ,
         //修改文件引用路径包括 require路径路径
         transformPath : function ( rev , source , file ) {
-            //if( source.indexOf('index') == '.js' ) {
-                console.log("rev~~~~: " + rev);
-                console.log("source~~~~: " + source);
-                console.log("file.revPath~~~~~:" + file.revPath);
-                console.log("file.revPathOriginal~~~~~:" +file.revPathOriginal);
+                //console.log("rev~~~~: " + rev);
+                //console.log("source~~~~: " + source);
+                //console.log("file.revPath~~~~~:" + file.revPath);
+                //console.log("file.revPathOriginal~~~~~:" +file.revPathOriginal);
 
 
-                    if ( rev !== file.revPath ) {
-                        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+                    /*if ( rev !== file.revPath ) {
                         console.log("file.path: " + file.path);
                         console.log("rev: "+rev)
-                        console.log( 'debugger here' );
-                    }
-                    console.log('---------------------------------')
+                    }*/
                     if ( CDN_PREFIX ) {
                         var filePath = file.revPathOriginal.slice( file.base.length ).replace( /\\/g , '/' ) ,
                             ext      = file.revFilenameExtOriginal;
@@ -81,7 +77,6 @@ var SRC        = 'app/public' ,
                     } else {
                         return rev;
                     }
-            //}
 
         }
     } );
