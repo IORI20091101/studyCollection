@@ -30,12 +30,14 @@
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             seajs.config({
-              base: "../",
+              base: "/",
               alias: {
-                "jquery": "/vendor/jquery-2.1.4.js"
+                "jquery": "/vendor/jquery.js"
               }
-            })
+            });
             seajs.use(['/scripts/index'], function(index) {
+                console.log('jinru html~~~');
+                console.log(index);
                 index.init();
             });
         </script>

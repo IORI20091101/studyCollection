@@ -10,5 +10,7 @@ define(function(require, exports, module) {
         console.log('has enter index');
     }
 
-    exports.init = init;
+    module.exports = {
+        init: init
+    };
 });
