@@ -2,6 +2,7 @@ node_modules
 build
 build-requirejs
 cdn
+tmp
 dist
 .tmp
 .sass-cache
