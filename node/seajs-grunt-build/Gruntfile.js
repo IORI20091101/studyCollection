@@ -58,15 +58,19 @@ module.exports = function (grunt){
             },
             // target
             js : {
-                files : [
-                    {
-                        expand : true,
-                        cwd : js_transport_target_path,
-                        src : ["*.js", "*/*.js"],
-                        dest : js_concat_target_path,
-                        ext : ".js"
-                    }
-                ]
+
+                src: [js_build_src_path+'/*.js'],
+                dest: js_build_src_path+'/index.js'
+
+                //files : [
+                    //{
+                        // : true,
+                        //cwd : js_transport_target_path,
+                        //src : ["*.js", "*/*.js"],
+                        //dest : js_concat_target_path,
+                        //ext : ".js"
+                    //}
+                //]
             }
         },
         sass_full_config = {
