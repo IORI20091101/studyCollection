@@ -5,6 +5,8 @@ cdn
 tmp
 dist
 .tmp
+.minify
+.build
 .sass-cache
 app/bower_components
 js/angular-requirejs-seed/app/bower_components
