@@ -21,7 +21,7 @@ app.set('views', path.join(__dirname, 'cdn/views'));
 app.set('view engine', 'jade');
 
 
-app.get('/', function (req, res) {
+app.get('*', function (req, res) {
   //res.redirect('/static/views/html/index.html');
   res.sendfile(__dirname+'/cdn/views/index.html');
 });
