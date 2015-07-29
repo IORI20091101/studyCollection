@@ -28,4 +28,4 @@
     1. 打包的入口文件包括，router, 和所有seajs.use 和require.async引用的文件，如果是单页应用在路由中使用require需要是require.async异步引用，这样会根据路由来动态下载所需要的文件，否则直接require会将所有的文件全部下载影响效率。具体在例子中有体现
     2. 通过transport生成的id 必须跟路径能够匹配起来，即完全一样，否则会有加载到不能执行的情况。
     3. 如果加载的时候[相对标识](https://github.com/seajs/seajs/issues/258)可能失效，则需要使用[普通路径](https://github.com/seajs/seajs/issues/258)
-    4. usemin中关于更改索引的时候添加了关于seajs的 seajs.use， define, 和require.async的相关规则这里查看了源码花费了很多时间完成 [源码地址](https://github.com/yeoman/grunt-usemin/blob/master/lib/fileprocessor.js)以做参考
+    4. usemin中关于更改索引的时候添加了关于seajs的 seajs.use， define, 和require.async的相关规则这里查看了源码花费了很多时间完成, 源码地址:https://github.com/yeoman/grunt-usemin/blob/master/lib/fileprocessor.js 以做参考
