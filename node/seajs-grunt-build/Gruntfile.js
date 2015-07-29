@@ -165,6 +165,7 @@ module.exports = function(grunt){
                options: {
                     algorithm: 'md5',
                     length: 8,
+                    //这里处理文件名字生成规则
                     process: function(basename, name, extension) {
                       grunt.log.write(basename+'\n');
                       grunt.log.write(name+'\n');
