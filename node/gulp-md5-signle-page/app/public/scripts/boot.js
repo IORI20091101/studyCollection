@@ -1,11 +1,9 @@
 requirejs.config({
     baseUrl:'/scripts/',
     paths:{
-        jquery: '../vendor/jquery-2.1.4.min',
-        backbone:'../vendor/backbone-min',
-        underscore:'../vendor/underscore-min',
-        juicer:'../vendor/juicer-min',
-        text:'../vendor/text'
+        jquery: '../vendor/jquery',
+        backbone:'../vendor/backbone',
+        underscore:'../vendor/underscore'
     },
 
     shim: {

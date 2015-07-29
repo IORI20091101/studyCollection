@@ -6,8 +6,84 @@ var path = require('path'),
     minifyHTML = require( 'gulp-htmlmin' ) ,
     concat     = require( 'gulp-concat' ) ,
     deleteFile = require( 'del' ) ,
-    revReplace = require('gulp-rev-replace'),
-    rev = require('gulp-rev');
+    revall     = new (require( 'gulp-rev-all' ))( {
+        //定义不需要重命名的文件，比如requirejs的配置文件boot.js, 服务器端配置的静态模板或者html的文件不能修改否则娶不到
+        //还有requiire文件本身，都不需要更改md5值
+        dontRenameFile : [ /^\/views\/index\w*\.html$/g /*,'vendor/require.js','scripts/boot.js'*/] ,
+        //这里的搜索指的是将所有引用文件的原文件名改成 修改后的md5值，比如define(['a']) ==> defind(['hash'])
+        dontSearchFile : [ /^\/scripts\/libs\/.*/g ] ,
+        //修改文件名字的规则 生成index.b2bxbsd.js类似这样的文件名
+        transformFilename : function ( file , hash ) {
+            //return hash + file.path.slice( file.path.lastIndexOf( '.' ) );
+            var ext = path.extname(file.path);
+            return path.basename(file.path, ext) + '.' + hash.substr(0,8) + ext ;
+        } ,
+        annotator : function(contents, path) {
+            var fragments = [{'contents': contents}];
+            return fragments;
+        },
+        replacer : function(fragment, replaceRegExp, newReference, referencedFile) {
+
+console.log(newReference);
+console.log(referencedFile.revPathOriginal);
+            var replaceStr = replaceRegExp+'';
+
+            doorList.forEach(function(v) {
+                var vArr = v.split('/');
+                var vStrFinal = "";
+                vArr.forEach(function(val) {
+                   vStrFinal += val + "\\" + "/";
+                })
+
+                vStrFinal = vStrFinal.slice(0, - 2);
+
+                if( replaceStr.indexOf(vStrFinal) > 0 ) {
+
+                    //console.log(replaceRegExp);
+
+                    var repStr1 =replaceStr.slice(0,4);
+                    var repStr2 =replaceStr.slice(4);
+                    //console.log(repStr1);
+                    //console.log(repStr2);
+
+                    //var replaceFinal = repStr1 + "define\('|" + 'define\("|' + repStr2;
+//console.log(fragment.contents);
+
+                    //console.log(replaceFinal);
+                    //console.log(replaceRegExp);
+                }
+            })
+             fragment.contents = fragment.contents.replace(replaceRegExp, '$1' + newReference + '$3$4');
+        },
+        hashLength: 8,
+        //修改文件路径 这里感觉不需要配置
+        transformPath : function ( rev , source , file ) {
+            //if ( rev !== file.revPath ) {
+            //    console.log( 'debugger here' );
+            //}
+
+            //console.log(rev);
+
+            return rev;
+            /*if ( CDN_PREFIX ) {
+                var filePath = file.revPathOriginal.slice( file.base.length ).replace( /\\/g , '/' ) ,
+                    ext      = file.revFilenameExtOriginal;
+
+                // 不是由 requireJS 加载的 js 文件要加前缀，由 requireJS 加载的 css 文件不要加前缀
+                if (
+                    ('.js' === ext && !matchArray( filePath , paths.jsNotLoadByRequireJS ))
+                    ||
+                    ('.css' === ext && matchArray( filePath , paths.cssLoadByRequireJS ))
+                ) {
+                    return rev;
+                }
+
+                return CDN_PREFIX + filePath;
+            } else {
+                return rev;
+            }*/
+        }
+    } );
 
 
 var SRC        = 'app/public' ,
@@ -56,11 +132,8 @@ gulp.task( 'html' , [ 'requirejs' ] , html );
 
 gulp.task( 'copy' , [ 'requirejs' ] , copy );
 
-gulp.task( 'revname', ['requirejs'], revname );
-
-
 // 第三步：将 DIST 文件夹下的文件打上 md5 签名并输出到 CDN 文件夹
-gulp.task( 'default' , ['js' , 'css' , 'html' , 'copy' ,'revname'] , revReplaceUrl );
+gulp.task( 'default' , ['js' , 'css' , 'html' , 'copy' ] , md5 );
 
 function clean( cb ) {
     deleteFile( [ DIST , REQUIREJS , CDN ] , cb );
@@ -91,31 +164,12 @@ function copy() {
         .pipe( gulp.dest( DIST ) );
 }
 
-function revname() {
-    return gulp.src(DIST + '/**/*.*')
-        .pipe(rev())
-        .pipe(gulp.dest(CDN))
-        .pipe(rev.manifest({
-            base: CDN,
-            merge: true // merge with the existing manifest (if one exists)
-        }))
-        .pipe(gulp.dest(CDN));
-
-}
-
-function revReplaceUrl() {
-    var manifest = gulp.src("app/cdn/rev-manifest.json");
-
-      return gulp.src("app/cdn/**/*.*")
-        .pipe(revReplace({manifest: manifest}));
-}
-
 function md5() {
-    /*return gulp.src( DIST + '/**' )
+    return gulp.src( DIST + '/**' )
         .pipe( revall.revision() )
         .pipe( gulp.dest( CDN ) )
         .pipe( revall.manifestFile() )
-        .pipe( gulp.dest( CDN ) );*/
+        .pipe( gulp.dest( CDN ) );
 }
 
 function requirejs( done ) {
