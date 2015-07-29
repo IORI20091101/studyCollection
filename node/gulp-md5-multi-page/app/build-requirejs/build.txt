@@ -1,0 +1,7 @@
+
+scripts/index.js
+----------------
+/scripts/config.js
+scripts/index.js
+scripts/b.js
+scripts/a.js

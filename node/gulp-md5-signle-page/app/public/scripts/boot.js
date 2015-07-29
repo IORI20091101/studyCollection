@@ -1,5 +1,5 @@
-require.config({
-    baseUrl:'/static/scripts/',
+requirejs.config({
+    baseUrl:'/scripts/',
     paths:{
         jquery: '../vendor/jquery-2.1.4.min',
         backbone:'../vendor/backbone-min',
@@ -9,13 +9,10 @@ require.config({
     },
 
     shim: {
-        'backbone':['underscore','jquery'],
-        'index':['backbone']
+        'backbone':['underscore','jquery']
     }
 });
 
-require(['index'], function(index) {
-    index();
-});
+requirejs(['router'], function() {});
 
 

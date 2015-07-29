@@ -1,55 +1,69 @@
-var SRC        = 'app/public' ,
-    REQUIREJS  = 'app/build-requirejs' ,
-    DIST       = 'app/build' ,
-    CDN        = 'app/cdn' ,
 
-    // 如果不是假值，那么这个值会作为 cdn 前缀追加到需要加载的文件里。
-    // 注意：最后面的斜线 / 一定要加上
-    CDN_PREFIX = 'http://localhost:3030/' ,
-    //CDN_PREFIX = 'http://localhost:61111/angularjs-requirejs-rjs-md5/cdn/' ,
-    //CDN_PREFIX = false ,
-    paths      = {
-
-        // 默认情况下所有 js 文件都是由 requireJS 加载的是不需要加前缀的，所以这里要列出不是由 requireJS 加载的 js 文件
-        jsNotLoadByRequireJS : [ 'scripts/boot.js' , 'vendor/require.js' ] ,
-
-        // 默认情况下所有 css 文件都是要加前缀的，但是由 requireJS 加载的 css 文件不用加
-        cssLoadByRequireJS : [ /^styles\/.*/ ] ,
-
-        js : [
-            REQUIREJS + '/**/*.js'
-        ] ,
-        cssFiles : [ REQUIREJS + '/**/*.css' ] ,
-        htmlFiles : REQUIREJS + '/**/*.html' ,
-        imageFiles : REQUIREJS + '/**/*.{png,jpg,gif}' ,
-        //传入gulp.src 的参数需要格式为vinyl-fs 的流文件，参数格式为['./js/**/*.js', '!./js/vendor/*.js'] 所以要加！号
-        copyFiles : [ REQUIREJS + '/**/*' , '!' + REQUIREJS + '/**/*.{js,css,html}' , '!' + REQUIREJS + '/build.txt' ]
-    } ,
-
+var path = require('path'),
     gulp       = require( 'gulp' ) ,
     minifyJS   = require( 'gulp-uglify' ) ,
     minifyCSS  = require( 'gulp-minify-css' ) ,
     minifyHTML = require( 'gulp-htmlmin' ) ,
-
-    //changed    = require( 'gulp-changed' ) ,
     concat     = require( 'gulp-concat' ) ,
     deleteFile = require( 'del' ) ,
     revall     = new (require( 'gulp-rev-all' ))( {
         //定义不需要重命名的文件，比如requirejs的配置文件boot.js, 服务器端配置的静态模板或者html的文件不能修改否则娶不到
         //还有requiire文件本身，都不需要更改md5值
-        dontRenameFile : [ /^\/views\/html\/index\w*\.html$/g , /^\/fonts\/.*/g ,'vendor/require.js','scripts/boot.js'] ,
+        dontRenameFile : [ /^\/views\/index\w*\.html$/g /*,'vendor/require.js','scripts/boot.js'*/] ,
         //这里的搜索指的是将所有引用文件的原文件名改成 修改后的md5值，比如define(['a']) ==> defind(['hash'])
         dontSearchFile : [ /^\/scripts\/libs\/.*/g ] ,
-        //修改文件名字的规则
+        //修改文件名字的规则 生成index.b2bxbsd.js类似这样的文件名
         transformFilename : function ( file , hash ) {
-            return hash + file.path.slice( file.path.lastIndexOf( '.' ) );
+            //return hash + file.path.slice( file.path.lastIndexOf( '.' ) );
+            var ext = path.extname(file.path);
+            return path.basename(file.path, ext) + '.' + hash.substr(0,8) + ext ;
         } ,
-        //修改文件路径
+        annotator : function(contents, path) {
+            var fragments = [{'contents': contents}];
+            return fragments;
+        },
+        replacer : function(fragment, replaceRegExp, newReference, referencedFile) {
+
+            var replaceStr = replaceRegExp+'';
+
+            doorList.forEach(function(v) {
+                var vArr = v.split('/');
+                var vStrFinal = "";
+                vArr.forEach(function(val) {
+                   vStrFinal += val + "\\" + "/";
+                })
+
+                vStrFinal = vStrFinal.slice(0, - 2);
+
+                if( replaceStr.indexOf(vStrFinal) > 0 ) {
+
+                    console.log(replaceRegExp);
+
+                    var repStr1 =replaceStr.slice(0,4);
+                    var repStr2 =replaceStr.slice(4);
+                    console.log(repStr1);
+                    console.log(repStr2);
+
+                    var replaceFinal = repStr1 + "define\('|" + 'define\("|' + repStr2;
+
+
+                    console.log(replaceFinal);
+                    console.log(replaceRegExp);
+                }
+            })
+             fragment.contents = fragment.contents.replace(replaceRegExp, '$1' + newReference + '$3$4');
+        },
+        hashLength: 8,
+        //修改文件路径 这里感觉不需要配置
         transformPath : function ( rev , source , file ) {
             //if ( rev !== file.revPath ) {
             //    console.log( 'debugger here' );
             //}
-            if ( CDN_PREFIX ) {
+
+            //console.log(rev);
+
+            return rev;
+            /*if ( CDN_PREFIX ) {
                 var filePath = file.revPathOriginal.slice( file.base.length ).replace( /\\/g , '/' ) ,
                     ext      = file.revFilenameExtOriginal;
 
@@ -61,20 +75,51 @@ var SRC        = 'app/public' ,
                 ) {
                     return rev;
                 }
-console.log(filePath);
-console.log(ext);
-console.log(CDN_PREFIX + rev);
-                // 其他文件一律加前缀
+
                 return CDN_PREFIX + filePath;
             } else {
                 return rev;
-            }
+            }*/
         }
     } );
 
+
+var SRC        = 'app/public' ,
+    REQUIREJS  = 'app/.requirejs' , //require 处理后的文件存放路径
+    DIST       = 'app/.build' , //压缩完毕的css，js存放路径
+    CDN        = 'app/cdn' , //最终生成的文件存放路径
+    doorList = [
+        'sms/router',
+        'concat/router'
+    ],
+    // 如果不是假值，那么这个值会作为 cdn 前缀追加到需要加载的文件里。
+    // 注意：最后面的斜线 / 一定要加上
+    CDN_PREFIX = 'http://localhost:3030/' ,
+    //CDN_PREFIX = 'http://localhost:61111/angularjs-requirejs-rjs-md5/cdn/' ,
+    //CDN_PREFIX = false ,
+    paths      = {
+
+        // 非require引用的文件，直接在页面引用到文件，如果根据文件更改引用
+        //jsNotLoadByRequireJS : [ 'scripts/boot.js' , 'vendor/require.js' ] ,
+
+        // 默认情况下所有 css 文件都是要加前缀的，但是由 requireJS 加载的 css 文件不用加
+        //cssLoadByRequireJS : [ /^styles\/.*/ ] ,
+
+        js : [
+            REQUIREJS + '/**/*.js'
+        ] ,
+        cssFiles : [ REQUIREJS + '/**/*.css' ] ,
+        htmlFiles : REQUIREJS + '/**/*.html' ,
+        imageFiles : REQUIREJS + '/**/*.{png,jpg,gif}' ,
+        //传入gulp.src 的参数需要格式为vinyl-fs 的流文件，参数格式为['./js/**/*.js', '!./js/vendor/*.js'] 所以要加！号
+        copyFiles : [ REQUIREJS + '/**/*' , '!' + REQUIREJS + '/**/*.{js,css,html}' , '!' + REQUIREJS + '/build.txt' ]
+    };
+
+
+
 gulp.task( 'clean' , clean );
 
-gulp.task( 'requirejs', requirejs ); //第一步： 从 SRC 把文件合并至 REQUIREJS 文件夹
+gulp.task( 'requirejs',['clean'], requirejs ); //第一步： 从 SRC 把文件合并至 REQUIREJS 文件夹
 
 // 第二步：下面四个操作是并行的，用于将 REQUIREJS 文件夹下的文件精简至 DIST 文件夹
 gulp.task( 'js' , [ 'requirejs' ] , js );
@@ -94,30 +139,26 @@ function clean( cb ) {
 
 function js() {
     return gulp.src( paths.js )
-        //.pipe( changed( DIST ) )
-        .pipe( minifyJS() )
+        //.pipe( minifyJS() )
         .pipe( gulp.dest( DIST ) );
 }
 
 function css() {
     return gulp.src( paths.cssFiles )
-        //.pipe( changed( DIST ) )
-        .pipe( minifyCSS() )
+        //.pipe( minifyCSS() )
         .pipe( gulp.dest( DIST ) );
 }
 
 function html() {
     return gulp.src( paths.htmlFiles , { base : REQUIREJS } )
-        //.pipe( changed( DIST ) )
-        .pipe( minifyHTML( {
+        /*.pipe( minifyHTML( {
             removeComments : true ,
             collapseWhitespace : true
-        } ) )
+        } ) )*/
         .pipe( gulp.dest( DIST ) );
 }
 function copy() {
     return gulp.src( paths.copyFiles )
-        //.pipe( changed( DIST ) )
         .pipe( gulp.dest( DIST ) );
 }
 
@@ -133,11 +174,11 @@ function requirejs( done ) {
     var r = require( 'requirejs' );
     r.optimize( {
         appDir : SRC ,
-        baseUrl:'./scripts/',
         dir : REQUIREJS ,
         optimize : 'none' ,
         optimizeCss : 'none' ,
         removeCombined : true ,
+        baseUrl:'./scripts/',
         paths:{
             jquery: '../vendor/jquery-2.1.4.min',
             backbone:'../vendor/backbone-min',
@@ -147,12 +188,17 @@ function requirejs( done ) {
         },
 
         shim: {
-            'backbone':['underscore','jquery'],
-            'index':['backbone']
+            'backbone':['underscore','jquery']
         },
         modules: [
             {
                 name: 'boot'
+            },
+            {
+                name: 'concat/router'
+            },
+            {
+                name: 'sms/router'
             }
         ],
         logLevel : 1

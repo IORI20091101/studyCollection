@@ -33,3 +33,30 @@
 第三方的js文件可以放到scripts的libs文件夹下，专业做法还是放到vendor文件夹下这里也改下
 
 
+##requirejs配置注意点
+* 使用requirejs最好使用baseUrl指向scripts的目录，其他目录通过../vendor来引用到path这样避免凌乱的配置
+* www/
+    * index.html
+    * js/
+        * app/
+            * sub.js
+        * lib/
+            * jquery.js
+            * canvas.js
+        * app.js
+* 一个文件一个模块: 每个Javascript文件应该只定义一个模块，这是模块名-至-文件名查找机制的自然要求。多个模块会被优化工具组织优化，但你在使用优化工具时应将多个模块放置到一个文件中。
+
+* define()中的相对模块名: 为了可以在define()内部使用诸如require("./relative/name")的调用以正确解析相对名称，记得将"require"本身作为一个依赖注入到模块中
+
+* 生成相对于模块的URL地址: 你可能需要生成一个相对于模块的URL地址。你可以将"require"作为一个依赖注入进来，然后调用require.toUrl()以生成该URL:
+```javascript
+    define(["require"], function(require) {
+        var cssUrl = require.toUrl("./style.css");
+    });
+```
+* 关于路径的问题，在scripts/router中设置的路由 /concat根据路径来加载文件时都是相对于 baseUrl这里于seajs不同
+seajs需要的是真实的url路径即普通标示
+
+* gulpfile.js中通过r.js优化代码时的配置 baseUrl:'scripts/' ,如果加了'/scripts/' 优化失败，需要注意,相对于appDir
+
+* 入口文件尽量不要通过md5改名字，因为改完名字后，js内部的内容可能不会改变，这样的话，导致路径和id不匹配的情况所以加载的文件也不会执行，由于这里的rev-all插件比较简单，就这样保持入口不变配置就可以， seajs项目中的usemin有详细配置那里我的操作就是讲js中的文件名也通过正则进行匹配更改，这里先这样满足需求即可，**但是有一个问题，如果没有md5文件无法更新。所以应该找seajs那边的操作更改文件中的引用**

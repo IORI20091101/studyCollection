@@ -29,3 +29,4 @@
     2. 通过transport生成的id 必须跟路径能够匹配起来，即完全一样，否则会有加载到不能执行的情况。
     3. 如果加载的时候[相对标识](https://github.com/seajs/seajs/issues/258)可能失效，则需要使用[普通路径](https://github.com/seajs/seajs/issues/258)
     4. usemin中关于更改索引的时候添加了关于seajs的 seajs.use， define, 和require.async的相关规则这里查看了源码花费了很多时间完成, 源码地址:https://github.com/yeoman/grunt-usemin/blob/master/lib/fileprocessor.js 以做参考
+    5. seajs一般只是用普通标示和相对标示，其他不需要关心
