@@ -30,3 +30,8 @@
     3. 如果加载的时候[相对标识](https://github.com/seajs/seajs/issues/258)可能失效，则需要使用[普通路径](https://github.com/seajs/seajs/issues/258)
     4. usemin中关于更改索引的时候添加了关于seajs的 seajs.use， define, 和require.async的相关规则这里查看了源码花费了很多时间完成, 源码地址:https://github.com/yeoman/grunt-usemin/blob/master/lib/fileprocessor.js 以做参考
     5. seajs一般只是用普通标示和相对标示，其他不需要关心
+
+
+##总结
+    做完了require的配置再来看seajs的配置还算比较简单，主要路径一个是相对路径，一个是普通路径这两种路径在transport的时候都会处理改正确的路径主要做了正则表达式的添加，还有一个transport的时候需要添加个idleading: '/scripts/'  这个属性来给处理的路径前缀保证路径正确，原则就是
+    **引用路径与id与http请求保持一致，这样usemin才会正确的更改引用，如果不用md5就随意了**
