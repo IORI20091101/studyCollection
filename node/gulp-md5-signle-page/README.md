@@ -73,6 +73,10 @@ define(['backbone','jquery','core/router']          不会被更改名字
 define(['backbone','jquery','/scripts/core/router'] 会被更改名字 这种是顶级标示
 
 现在的问题主要路径的问题，通过修改路径 全部得到解决require中的路径前不要加./ ../ / 类似的路径所有解析都是相对于basrUrl  将basrUrl设置成/ 其他都相对于此路径 scripts/router类似这样都可以取到
-**将文件的baseUrl设置成顶级目录/ 不要使用相对路径进行引用**
+**将文件的baseUrl设置成顶级目录/ 不要使用相对路径进行引用 这样的改成md5名字后才能将所有引用正确更改**
 
 ##seajs中transport会自动解析成正确的路径不需要考虑 默认顶级目录##
+
+##r.js 和 config两边的配置要保持一致。##
+
+##服务器目录设置需要与requirejs配置的保持一致这样就不会有问题##

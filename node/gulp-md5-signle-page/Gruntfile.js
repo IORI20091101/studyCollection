@@ -30,16 +30,15 @@ module.exports = function(grunt){
           requirejs: {
             std: {
               options: {
-                appDir : source,
                 optimize : 'none' ,
                 optimizeCss : 'none' ,
                 removeCombined : true ,
-                baseUrl:'./scripts/',
+                baseUrl:'app/public/',
                 dir: build,
                 paths:{
-                    jquery: '../vendor/jquery',
-                    backbone:'../vendor/backbone',
-                    underscore:'../vendor/underscore'
+                    jquery: 'vendor/jquery',
+                    backbone:'vendor/backbone',
+                    underscore:'vendor/underscore'
                 },
 
                 shim: {
@@ -47,13 +46,13 @@ module.exports = function(grunt){
                 },
                 modules: [
                     {
-                        name: 'boot'
+                        name: 'scripts/boot'
                     },
                     {
-                        name: 'concat/router'
+                        name: 'scripts/concat/router'
                     },
                     {
-                        name: 'sms/router'
+                        name: 'scripts/sms/router'
                     }
                 ]
               }
@@ -89,9 +88,9 @@ module.exports = function(grunt){
                        // includes files within path
                          {
                              expand: true,
-                             cwd: 'app/public',//'app/public/views/'
+                             cwd: 'app/public/views',//'app/public/views/'
                              src: ['**'],
-                             dest: 'app/cdn',//'app/cdn/views'
+                             dest: 'app/cdn/views',//'app/cdn/views'
                              filter: 'isFile'
                          }
                     ]
@@ -245,5 +244,5 @@ module.exports = function(grunt){
      grunt.loadNpmTasks('grunt-contrib-cssmin');
      grunt.loadNpmTasks('grunt-requirejs');
 
-     grunt.registerTask('default',['clean'/*,'requirejs','uglify','copy','cssmin','imagemin',*/,'copy','filerev','usemin'])
+     grunt.registerTask('default',['clean','requirejs','uglify','copy','cssmin','imagemin','copy','filerev','usemin'])
 };
