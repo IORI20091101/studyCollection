@@ -17,7 +17,6 @@
     "grunt-contrib-copy": "^0.8.0",
     "grunt-usemin": "3.0.0",
     "grunt-contrib-cssmin": "^0.13.0",
-    //"grunt-contrib-imagemin": "^0.9.4",
     "grunt-filerev": "^2.3.1",
     "grunt-rev-all": "0.1.1",
     "grunt-requirejs" : "*"

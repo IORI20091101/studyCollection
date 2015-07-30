@@ -1,6 +1,9 @@
-#gulp require.js 应用开发配置
+#gulp require.js 应用开发配置，该项目使用require-gulp 进行构建，无问题，只要路径配对了都可以满足需求
 
-使用gulp 对使用requirejs 的文件进行打包压缩，更改文件名成为md5值等等操作
+
+
+由于使用了require以前transport和concat的操作大部分不需要重新配置
+
 
 *require.js在实际应用中分两种情况*
 *   第一种开发单页面应用。使用data-main 加载。
@@ -62,4 +65,21 @@ seajs需要的是真实的url路径即普通标示
 * 入口文件尽量不要通过md5改名字，因为改完名字后，js内部的内容可能不会改变，这样的话，导致路径和id不匹配的情况所以加载的文件也不会执行，由于这里的rev-all插件比较简单，就这样保持入口不变配置就可以， seajs项目中的usemin有详细配置那里我的操作就是讲js中的文件名也通过正则进行匹配更改，这里先这样满足需求即可，**但是有一个问题，如果没有md5文件无法更新。所以应该找seajs那边的操作更改文件中的引用**
 
 
-#此项目不是最佳实践测试用，请看signle， 和seajs项目
+seajs 必须transport 再concat ，而且路径无问题
+
+require必须 使用自带的r.js来合并。
+requirejs有点复杂，一般来说引用是相对于baseUrl来说的，比如/scripts/,但是文件里面引用就变成了concat/router类似这样，但是这样的不能通过查找来替换，需要写顶级标示/scripts/concat/router这样插件才能找到并替换名字，才能正常显示，也就是说，这里配置baseUrl需要为/ 顶级，然后文件的引用相对于这个来引用
+
+define(['backbone','jquery','core/router']          不会被更改名字
+define(['backbone','jquery','/scripts/core/router'] 会被更改名字 这种是顶级标示
+
+现在的问题主要路径的问题，通过修改路径 全部得到解决require中的路径前不要加./ ../ / 类似的路径所有解析都是相对于basrUrl  将basrUrl设置成/ 其他都相对于此路径 scripts/router类似这样都可以取到
+**将文件的baseUrl设置成顶级目录/ 不要使用相对路径进行引用 这样的改成md5名字后才能将所有引用正确更改**
+
+##seajs中transport会自动解析成正确的路径不需要考虑 默认顶级目录##
+
+##r.js 和 config两边的配置要保持一致。##
+
+##服务器目录设置需要与requirejs配置的保持一致这样就不会有问题##
+
+

@@ -113,7 +113,20 @@ module.exports = function(grunt){
                              filter: 'isFile'
                          }
                     ]
-               }/*,
+               },
+               images: {
+                    files: [
+                       // includes files within path
+                         {
+                             expand: true,
+                             cwd: 'app/public/images/',
+                             src: ['**'],
+                             dest: 'app/cdn/images',
+                             filter: 'isFile'
+                         }
+                    ]
+               }
+               /*,
                cssFile:{
                   files:[
                     {
@@ -243,7 +256,7 @@ module.exports = function(grunt){
      grunt.loadNpmTasks('grunt-contrib-copy');
      grunt.loadNpmTasks('grunt-filerev');
      grunt.loadNpmTasks('grunt-usemin');
-     grunt.loadNpmTasks('grunt-contrib-imagemin');
+     //grunt.loadNpmTasks('grunt-contrib-imagemin');
      grunt.loadNpmTasks('grunt-contrib-cssmin');
 
      grunt.registerTask('default',['clean','transport','concat','uglify','copy','cssmin','filerev','usemin'])
