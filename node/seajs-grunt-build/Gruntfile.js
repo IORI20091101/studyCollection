@@ -246,5 +246,5 @@ module.exports = function(grunt){
      grunt.loadNpmTasks('grunt-contrib-imagemin');
      grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-     grunt.registerTask('default',['clean','transport','concat','uglify','copy','cssmin','imagemin','filerev','usemin'])
+     grunt.registerTask('default',['clean','transport','concat','uglify','copy','cssmin','filerev','usemin'])
 };

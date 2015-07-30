@@ -244,5 +244,5 @@ module.exports = function(grunt){
      grunt.loadNpmTasks('grunt-contrib-cssmin');
      grunt.loadNpmTasks('grunt-requirejs');
 
-     grunt.registerTask('default',['clean','requirejs','uglify','copy','cssmin','imagemin','copy','filerev','usemin'])
+     grunt.registerTask('default',['clean','requirejs','uglify','copy','cssmin','copy','filerev','usemin'])
 };
