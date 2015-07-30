@@ -1,4 +1,4 @@
-define(['../tmpl/tmpl'], function (tmpl) {
+define(['scripts/sms/tmpl/tmpl'], function (tmpl) {
 
     //console.log(tmpl);
 

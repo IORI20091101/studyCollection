@@ -1,16 +1,19 @@
 requirejs.config({
-    baseUrl:'/scripts/',
-    paths:{
-        jquery: '../vendor/jquery',
-        backbone:'../vendor/backbone',
-        underscore:'../vendor/underscore'
-    },
+        baseUrl:'/',
+        paths:{
+            jquery: '/vendor/jquery',
+            backbone:'/vendor/backbone',
+            underscore:'/vendor/underscore'
+        },
 
-    shim: {
-        'backbone':['underscore','jquery']
-    }
-});
+        shim: {
+            'backbone':['underscore','jquery']
+        }
+    });
 
-requirejs(['router'], function() {});
+
+requirejs(['scripts/router'], function() {});
+
+
 
 

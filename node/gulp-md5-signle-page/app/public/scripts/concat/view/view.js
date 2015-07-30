@@ -1,4 +1,4 @@
-define(['../tmpl/tmpl'], function (tmpl) {
+define(['scripts/concat/tmpl/tmpl'], function (tmpl) {
     //console.log(tmpl);
     var concatView = function() {
         //console.log('进入 concat');

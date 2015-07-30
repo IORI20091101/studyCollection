@@ -1,4 +1,4 @@
-define(['./view/view'],function (concatView) {
+define(['scripts/concat/view/view'],function (concatView) {
   //var $ = require('jquery');
   //var _ = require('underscore');
   //var Backbone = require('backbone');

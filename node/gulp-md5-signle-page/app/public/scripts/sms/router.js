@@ -1,4 +1,4 @@
-define(['./view/view'], function (smsView) {
+define(['scripts/sms/view/view'], function (smsView) {
   //var $ = require('jquery');
   //var _ = require('underscore');
   //var Backbone = require('backbone');

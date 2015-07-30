@@ -1,4 +1,4 @@
-define(['backbone','jquery','core/router'],function (backbone, jquery, localRouter) {
+define(['backbone','jquery','scripts/core/router'],function (backbone, jquery, localRouter) {
   //var $ = require('jquery');
   //var _ = require('underscore');
   //var Backbone = require('backbone');
@@ -21,12 +21,12 @@ define(['backbone','jquery','core/router'],function (backbone, jquery, localRout
       },
       sms: function(path) {
 
-         requirejs( ['sms/router'], function( smsRouter ) {
+         requirejs(['scripts/sms/router'], function( smsRouter ) {
                 smsRouter( path );
             });
       },
       concat: function(path) {
-         requirejs( ['concat/router'], function( concatRouter ) {
+         requirejs(['scripts/concat/router'], function( concatRouter ) {
                 concatRouter( path );
             });
       }
