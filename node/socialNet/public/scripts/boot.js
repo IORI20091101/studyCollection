@@ -5,7 +5,8 @@ require.config({
         juicer:'/static/scripts/libs/juicer-min',
         Backbone:'/static/scripts/libs/backbone',
         text:'/static/scripts/libs/text',
-        tmpl:'/static/scripts/libs/tmpl'
+        tmpl:'/static/scripts/libs/tmpl',
+        Sockets:'/socket.io/socket.io'
     },
 
     shim: {

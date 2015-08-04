@@ -2,6 +2,8 @@ var express = require('express');
 var expressMongoose = require('express-mongoose');
 var app = express();
 var nodemailer = require('nodemailer');
+var MemoryStore = require('connect').session.MemoryStore;
+var dbPath = 'mongodb://localhost/nodebackbone';
 
 var config = {
     mail: require('./config/mail')
@@ -9,7 +11,10 @@ var config = {
 
 var mongoose = require('mongoose');
 var path = require('path');
-var Account = require('./models/Account')(config, mongoose, nodemailer);
+
+var models = {
+    Account: require('./models/Account')(config, mongoose, nodemailer)
+}
 
 
 app.configure(function() {
@@ -20,10 +25,12 @@ app.configure(function() {
     app.use(express.bodyParser());
     app.use(express.cookieParser());
 
-    app.use(express.session({secret:'Social secret key', store: newMemoryStore()}));
-    mongoose.connect('mongodb://localhost/mydb');
-
-
+    app.use(express.session({secret:'Social secret key', store: new MemoryStore()}));
+    mongoose.connect(dbPath, function onMessageError(err) {
+        if( err ) {
+            throw err;
+        }
+    });
 });
 
 
@@ -56,12 +63,12 @@ app.post('/register', function(req, res) {
     var email = req.param('email', null);
     var password = req.param('password', null);
 
-    if( null != email || null == password ) {
+    if( null == email || email.length < 1 || null == password || password.length < 1 ) {
         res.send(400);
         return;
     }
 
-    Account.register(email, password, firstName, lastName);
+    models.Account.register(email, password, firstName, lastName);
 
     res.send(200);
 
@@ -77,12 +84,14 @@ app.post('/login', function(req, res) {
         return;
     }
 
-    Account.login(email, password, function(success) {
+    models.Account.login(email, password, function(success) {
         if( !success ) {
             res.send(401);
             return;
         }
         console.log('Login was successful!');
+        req.session.loggedIn = true;
+        req.session.accountId = success._id;
         res.send(200);
     });
 });
@@ -97,7 +106,7 @@ app.post('/forgotpasword', function(req, res) {
         res.send(400);
         return;
     }
-    Account.forgetPassord(email, resetPasswordUrl, function(success) {
+    models.Account.forgetPassord(email, resetPasswordUrl, function(success) {
         if( success ) {
             res.send(200);
         } else {
@@ -116,7 +125,7 @@ app.post('/resetPassword', function(req, res) {
     var accountId = req.param('account', null);
     var password = req.param('password', null);
     if( null == accountId && null != password ) {
-        Account.changePassword(accountId, password);
+        models.Account.changePassword(accountId, password);
     }
     res.render('resetPasswordSuccess',{});
 })
@@ -124,7 +133,129 @@ app.post('/resetPassword', function(req, res) {
 
 app.get('/accounts/:id', function(req, res) {
     var accountId = req.params.id=='me'?req.session.accountId:req.params.id;
-    Account.findOne({_id:accountId}, function(account) {
+    models.Account.findById(accountId, function(account) {
+        if( accountId == 'me' || models.Account.hasContact(account, req.session.accountId) ) {
+            account.isFrend = true;
+        }
         res.send(account);
     })
+})
+
+//获取状态列表
+app.get('/accounts/:id/status', function(req, res) {
+    var accountId = req.params.id == 'me'
+                        ?req.session.accountId
+                        :req.params.id;
+
+    models.Account.findById(accountId, function(account) {
+        res.send(account.status);
+    });
+});
+
+//设置状态列表
+app.post('/accounts/:id/status', function(req, res) {
+    var accountId = req.params.id == 'me'
+                        ?req.session.accountId
+                        :req.params.id;
+    models.Account.findById(accountId, function(account) {
+        status = {
+            name: account.name,
+            status: req.param('status')
+        }
+        account.status.push(status);
+
+        account.activity.push(status);
+
+        account.save(function( err ) {
+            if( err ) {
+                console.log('Error saving account:' + err);
+            }
+        });
+    });
+
+    res.send(200);
+})
+
+//获取活动列表
+app.get('/accounts/:id/activity', function(req, res) {
+    var accountId = req.params.id == 'me'
+                        ?req.session.accountId
+                        :req.params.id;
+    models.Account.findById(accountId, function(account) {
+        res.send(account.activity);
+    });
+});
+
+app.get('/accounts/:id/contacts', function(req, res) {
+    var accountId = req.params.id == 'me'
+                        ? req.session.accountId
+                        :req.params.id;
+    models.Account.findById(accountId, function(account) {
+        res.send(account.contacts);
+    })
+})
+
+app.post('/contacts/find', function(req, res) {
+    var searchStr = req.param('searchStr', null);
+    if( null == searchStr ) {
+        res.send(400);
+        return;
+    }
+
+    models.Account.findByString(searchStr, function onSearchDone(err, accounts) {
+        if( err || accounts.lenvgth == 0 ) {
+            res.send(404);
+        } else {
+            res.send(accounts);
+        }
+    })
+});
+
+app.post('/accounts/:id/contact', function(req, res) {
+    var accountId = req.params.id == 'me'
+                        ?req.session.accountId
+                        :req.params.id;
+
+    var contactId = req.param('contactId', null);
+
+    if( null == contactId ) {
+        res.send(400);
+        return;
+    }
+
+    models.Account.findById(accountId, function(account) {
+        if( account ) {
+            models.Account.findById(contactId, function(contact) {
+                models.Account.addContact(account, contact);
+
+                models.Account.addContact(contact, account);
+                account.save();
+            })
+        }
+        res.send(200);
+    })
+});
+
+
+app.delete('/accounts/:id/contact', function(req, res) {
+    var accountId = req.params.id=='me'
+                        ?req.session.accountId
+                        :req.params.id;
+    var contactId = req.param('contactId', null);
+    if( null == contactId ) {
+        res.send(400);
+        return;
+    }
+    models.Account.findById(accountId, function(account) {
+        if( !account ) return;
+
+        models.Account.findById(contactId, function(contact, err) {
+            if( !contact ) return;
+            models.Account.removeContact(account, contactId);
+
+            models.Account.removeContact(contact, accountId);
+        })
+
+        res.send(200);
+    });
 })
