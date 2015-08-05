@@ -1,12 +1,14 @@
 require.config({
     paths:{
-        jQuery: '/static/scripts/libs/jquery-2.1.4.min',
-        Underscore:'/static/scripts/libs/underscore',
-        juicer:'/static/scripts/libs/juicer-min',
-        Backbone:'/static/scripts/libs/backbone',
-        text:'/static/scripts/libs/text',
-        tmpl:'/static/scripts/libs/tmpl',
-        Sockets:'/socket.io/socket.io'
+        jQuery: '/scripts/libs/jquery-2.1.4.min',
+        Underscore:'/scripts/libs/underscore',
+        juicer:'/scripts/libs/juicer-min',
+        Backbone:'/scripts/libs/backbone',
+        text:'/scripts/libs/text',
+        tmpl:'/scripts/tmpl',
+        Sockets:'/socket.io/socket.io',
+        models:'models',
+        SocialNetView:'/scripts/SocialNetView'
     },
 
     shim: {

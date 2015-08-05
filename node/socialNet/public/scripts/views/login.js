@@ -1,5 +1,6 @@
-define(['text!tmpl/login.html'], function(loginTmpl) {
-    var LoginView = Backbone.View.extend({
+define(['SocialNetView','text!tmpl/login.html'], function(SocialNetView,loginTmpl) {
+    var LoginView = SocialNetView.extend({
+        requireLogin: false,
         el: $("#content"),
         events: {
             "submit form": "login"
@@ -10,12 +11,9 @@ define(['text!tmpl/login.html'], function(loginTmpl) {
         login: function() {
 
             var socketEvents = this.socketEvents;
-            $.post('/login', {
-                email:$('input[name=email]').val(),
-                password:$('input[name=password]').val()
-            }, function(data) {
+            $.post('/login', this.$('form').serialize(), function(data) {
                 console.log(data);
-                socketEvents.trigger('app:loggedin');
+                socketEvents.trigger('app:loggedin',data);
                 window.location.hash ='index';
             }).error(function() {
                 $("#error").text("Unable to login.").slideDown();
@@ -25,6 +23,8 @@ define(['text!tmpl/login.html'], function(loginTmpl) {
         },
         render: function() {
             this.$el.html(loginTmpl);
+            $('#error').hide();
+            $('input[name=email]').focus();
         }
     });
 

@@ -54,5 +54,5 @@ define([
             })
         }
     });
-    return contactsView;
+    return contactView;
 })

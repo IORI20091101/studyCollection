@@ -7,7 +7,7 @@ define([
     'views/contacts',
     'views/addcontact',
     'models/Account',
-    'modles/StatusCollection',
+    'models/StatusCollection',
     'models/ContactCollection'
     ], function(IndexView,
         RegisterView,
@@ -61,7 +61,9 @@ define([
             statusCollection.fetch();
         },
         login: function() {
-            this.changeView(new LoginView());
+            this.changeView(new LoginView({
+                socketEvents: this.socketEvents
+            }));
         },
         forgotpassword: function() {
             this.changeView(new ForgotPasswordView());
@@ -71,7 +73,7 @@ define([
         },
         profile: function(id) {
             var model = new Account({id: id});
-            this.changeView(new ProfileView({model: model}));
+            this.changeView(new ProfileView({model: model, socketEvents: this.socketEvents}));
             model.fetch();
         }
     })

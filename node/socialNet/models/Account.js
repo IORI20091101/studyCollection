@@ -1,4 +1,4 @@
-model.exports = function(config, mongoose, Status,nodemailer) {
+module.exports = function(config, mongoose, Status,nodemailer) {
     var crypto = require('crypto');
 
     var Status = new mongoose.Schema({
@@ -9,14 +9,28 @@ model.exports = function(config, mongoose, Status,nodemailer) {
         status:{type:String}
     });
 
+    var schemaOptions = {
+        toJSON: {
+            virtuals: true
+        },
+        toObject: {
+            virtuals: true
+        }
+    }
+
     var Contact = new mongoose.Schema({
         name: {
             first: {type: String},
             last: {type: String}
         },
-        accountId: {type:mongoose.Shcema.ObjectId},
+        accountId: {type: mongoose.Schema.Types.ObjectId},
         add: {type: Date},
         updated: {type: Date}
+    }, schemaOptions);
+
+
+    Contact.virtual('online').get(function() {
+        return app.isAccountOnline(this.get('accountId'));
     });
 
     var AccountSchema = new mongoose.Schema({
@@ -41,7 +55,7 @@ model.exports = function(config, mongoose, Status,nodemailer) {
         activity: [Status]
     });
 
-    var Account = mogoose.model('Account', AccountSchema);
+    var Account = mongoose.model('Account', AccountSchema);
 
     var registerCallback = function(err) {
         if(err) {

@@ -2,7 +2,7 @@ define([
     'SocialNetView',
     'text!tmpl/index.html',
     'views/status',
-    'modles/Status'
+    'models/Status'
     ], function(SocialNetView,indexTmpl, StatusView, Status) {
 
         var indexView = SocialNetView.extend({
@@ -10,7 +10,8 @@ define([
             events: {
                 "Submit form": "updateStatus"
             },
-            initialize: function() {
+            initialize: function(options) {
+                options.socketEvents.bind('status:me', this.onSocketStatusAdd, this);
                 this.collection.on('add', this.onStatusAdded, this);
                 this.collection.on('reset', this.onStatusCollectionReset, this);
             },
@@ -19,6 +20,20 @@ define([
                 collection.each(function(model) {
                     that.onStatusAdded(model);
                 });
+            },
+            onSocketStatusAdd: function(data) {
+                var newStatus = data.data;
+                var found = false;
+                this.collection.forEach(function(status) {
+                    var name = status.get('name');
+                    if( name && name.full == newStatus.name.full && status.get('status') == newStatus.status ) {
+                        found = true;
+                    }
+                });
+
+                if( !found ) {
+                    this.collection.add(new Status({status: newStatus.status, name: newStatus.name}))
+                }
             },
             onStatusAdded:function(status) {
                 var statusHtml = (new StatusView({model: status})).render().el;
