@@ -9,6 +9,7 @@
     "express": "~4.2.0",
     "express-params": "0.0.3",
     "express-session": "^1.9.1",
+    "crypto":"0.0.3",
     "jquery-file-upload-middleware": "^0.1.7",
     "mysql": "^2.5.3",
     "up":"~0.6.0"
