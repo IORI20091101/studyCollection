@@ -24,7 +24,7 @@ define([
         currentView: null,
         socketEvents: _.extend({}, Backbone.Events),
         routes:{
-            "index": "index",
+            "": "index",
             "login":"login",
             "register":"register",
             "forgotpassword":"forgotpassword",
