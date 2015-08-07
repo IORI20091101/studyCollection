@@ -1,13 +1,12 @@
-<!doctype html>
-<html>
-    <head>
-        <title></title>
-    </head>
-    <body>
-        <h1><%=name.first%> <%=name.last%></h1>
-        <h2>Status update</h2>
-        <ul class="status_list">
 
-        </ul>
-    </body>
-</html>
+<h1><%=name.first%> <%=name.last%></h1>
+<form>
+    <fieldset>
+        <legend>Add Status</legend>
+        <input type="text" name="status"/>
+        <input type="submit" value="add"/>
+    </fieldset>
+</form>
+<h2>Status Update</h2>
+
+<ul class="status_list"></ul>

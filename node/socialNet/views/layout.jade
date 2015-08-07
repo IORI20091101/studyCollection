@@ -1,6 +1,7 @@
 doctype html
 html(lang='en')
   head
+    link(rel='stylesheet', href="/styles/styles.css")
     title social NetWork
   body
     h1 my social network app
@@ -9,10 +10,11 @@ html(lang='en')
   footer
     hr
     p footer~~~
-    //script(type='text/javascript', src='/static/scripts/libs/jquery-2.1.4.min.js')
-    //script(type='text/javascript', src='/static/scripts/libs/underscore.js')
-    //script(type='text/javascript', src='/static/scripts/libs/backbone.js')
-    //script(type='text/javascript', src='/static/scripts/libs/juicer-min.js')
+    script(type='text/javascript', src='/scripts/libs/jquery-2.1.4.min.js')
+    script(type='text/javascript', src='/scripts/libs/underscore.js')
+    script(type='text/javascript', src='/scripts/libs/backbone.js')
+    script(type='text/javascript', src='/scripts/libs/juicer-min.js')
+    script(type='text/javascript', src='/socket.io/socket.io.js')
 
-    script(data-main='/static/scripts/boot', type='text/javascript', src='/static/scripts/libs/require.js')
+    script(data-main='/scripts/boot', type='text/javascript', src='/scripts/libs/require.js')
     block footer

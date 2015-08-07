@@ -4,24 +4,65 @@ define(['SocialNetView',
     'models/Status',
     'views/Status'],
     function(SocialNetView,profileTmpl,statusTmpl,Status, StatusView) {
-    el:$('#content'),
-    initialize: function() {
-        this.model.bind('change', this.render, this);
-    },
-    render: function() {
-        this.$el.html(_.template(profileTmpl, this.model.toJSON()));
-    };
+        var profileView = SocialNetView.extend({
+            el:$('#content'),
+            initialize: function() {
+                this.model.bind('change', this.render, this);
+            },
+            events:{
+                "submit form": "postStatus"
+            },
+            initialize: function(options) {
+                this.socketEvents = options.socketEvents;
+                this.model.bind('change', this.render, this);
+            },
+            render: function() {
+                this.$el.html(_.template(profileTmpl, this.model.toJSON()));
+            },
+            postStatus:function() {
+                var that = this;
+                var statusText = $('input[name=status]').val();
+                var statusCollection = this.collection;
+                $.post('/accounts/' + this.model.get('_id') + '/status',{
+                    status: statusText
+                }, function(data) {
+                    //that.prependStatus(new Status({status: statusText}));
+                })
+                return false;
+            },
+            onSocketStatusAdded: function(data) {
+                var newStatus = data.data;
+                this.prependStatus(new Status({status: newStatus.status, name: newStatus.name}));
+            },
+            prependStatus: function(statusModel) {
+                var statusHtml = (new StatusView({model: statusModel})).render().el;
+                $(statusHtml).prependTo('.status_list').hide().fadeIn('slow');
+            },
 
+            render: function() {
+                if( this.model.get('_id') ) {
+                    this.socketEvents.bind('status:'+ this.model.get('_id'),
+                        this.onSocketStatusAdded,
+                        this
+                    );
+                }
 
-    var statusCollection = this.model.get('status');
+                var that = this;
+                this.$el.html(
+                    _.template(profileTmpl, this.model.toJSON())
+                );
 
-    if( null != statusCollection ) {
-        _.each(statusCollection, function(statusJson) {
-            var statusModel = new Status(statusJson);
-            var statusHtml = (new StatusView({model: statusModel})).render().el;
-            $(statusHtml).prependTo('.status_list').hide.fadeIn('slow');
-        });
-    }
+                var statusCollection = this.model.get('status');
+
+                if( null != statusCollection ) {
+                    _.each(statusCollection, function(statusJson) {
+                        var statusModel = new Status(statusJson);
+                        that.prependStatus(statusModel);
+                    });
+                }
+            }
+        })
+
 
     return profileView;
 });
