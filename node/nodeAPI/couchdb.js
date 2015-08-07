@@ -1,0 +1,2 @@
+//CouchDB使用http请求来创建和操作数据库下面是原始的操作方法
+var http

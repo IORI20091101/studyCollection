@@ -1,0 +1,20 @@
+{
+  "name": "couchdb",
+  "version": "0.0.1",
+  "private": "true",
+  "devDependencies": {
+    "colors": "0.5.0",
+    "felix-couchdb":"*"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "dependencies": {
+    "underscore": "^1.8.3",
+    "moment": "^2.8.4",
+    "morgan": "~1.0.0"
+  }
+}

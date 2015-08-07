@@ -19,6 +19,6 @@
     "test": "grunt test"
   },
   "dependencies": {
-
+    "redis":"*"
   }
 }
