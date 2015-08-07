@@ -38,10 +38,10 @@ var SRC        = 'app/public' ,
     revall     = new (require( 'gulp-rev-all' ))( {
         //定义不需要重命名的文件，比如requirejs的配置文件boot.js, 服务器端配置的静态模板或者html的文件不能修改否则娶不到
         //还有requiire文件本身，都不需要更改md5值
-        dontRenameFile : [ /^\/views\/html\/index\w*\.html$/g , /^\/fonts\/.*/g ,'vendor/require.js','scripts/index.js','scripts/config.js'] ,
+        dontRenameFile : [ /^\/views\/html\/index\w*\.html$/g , /^\/fonts\/.*/g ,'vendor/require.js','scripts/index.js','scripts/config.js','vendor/require.js','scripts/index.js','scripts/config.js'] ,
         //这里的搜索指的是将所有引用文件的原文件名改成 修改后的md5值，比如define(['a']) ==> defind(['hash'])
         //具体路径的更改在transformPath方法中进行。
-        dontSearchFile : [ /^\/vendor\/.*/g, /^\/views\/html\/index\w*\.html$/g ] ,
+        dontSearchFile : [ /^\/vendor\/.*/g, /^\/views\/html\/index\w*\.html$/g ,'scripts/index.js'] ,
         //修改文件名字的规则
         transformFilename : function ( file , hash ) {
             return hash + file.path.slice( file.path.lastIndexOf( '.' ) );
@@ -149,8 +149,7 @@ function requirejs( done ) {
         },
 
         shim: {
-            'backbone':['underscore','jquery'],
-            'index':['backbone']
+            'backbone':['underscore','jquery']
         },
         modules: [
             /*{

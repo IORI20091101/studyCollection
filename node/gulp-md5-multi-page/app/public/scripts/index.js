@@ -1,4 +1,4 @@
-define(['require','scripts/a','scripts/config.js'], function(require, a) {
+define(['require','scripts/a','scripts/config'], function(require, a) {
     /*require(['a'], function(a) {
 
 
