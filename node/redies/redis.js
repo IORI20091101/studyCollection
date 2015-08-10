@@ -171,3 +171,34 @@ client.zcard("contestants", function(err, length) {
     }
 });
 
+
+//使用redis订阅和发布
+var redis=require("redis"),
+    talkactiveClient = redis.createClient(),
+    pensiveClient = redis.createClient;
+
+pensiveClient.on("subscribe", function(channel, count) {
+    talkactiveClient.publish(channel, "Welcome to" + channel);
+    talkactiveClient.publish(channel, "You subscribed to "+ count + " channels!");
+});
+
+
+pensiveClient.on("unsubscribe", function(channel, count) {
+    if( count == 0 ) {
+        talkactiveClient.end();
+        pensiveClient.end();
+    }
+})
+
+
+pensiveClient.on("message", function(channel, message) {
+    console.log(channel + " : " + message);
+});
+
+pensiveClient.on("ready", function() {
+    pensiveClient.subscribe("quiet channel", "peaceful channel", "noisy channel");
+
+    setTimeout(function() {
+        pensiveClient.unsubscribe("quiet channel", "peaceful channel", "noisy channel")
+    },1000)
+})
