@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+    <head>
+        <title>canvas2img</title>
+        <link rel="stylesheet" type="text/css" href="/styles/common.css"/>
+    </head>
+    <body>
+        <canvas id="cv"></canvas>
+    </body>
+    <script src="/vendor/jquery.js"></script>
+    <script src="/vendor/underscore.js"></script>
+    <script type="text/javascript">
+        function draw0(id) {
+            var canvas = document.getElementById("cv");
+            if (canvas == null) {
+                return false;
+            }
+            var context = canvas.getContext('2d');
+            context.beginPath();
+            context.arc(200, 150, 100, 0, Math.PI * 2, true);
+            //不关闭路径路径会一直保留下去，当然也可以利用这个特点做出意想不到的效果
+            context.closePath();
+            context.fillStyle = 'rgba(0,255,0,0.25)';
+            context.fill();
+         }
+
+         draw0();
+
+
+        // Converts image to canvas; returns new canvas element
+        function convertImageToCanvas(image) {
+            var canvas = document.createElement("canvas");
+            canvas.width = image.width;
+            canvas.height = image.height;
+            canvas.getContext("2d").drawImage(image, 0, 0);
+
+            return canvas;
+        }
+
+        // Converts canvas to an image
+        function convertCanvasToImage(canvas) {
+            var image = new Image();
+            image.src = canvas.toDataURL("image/png");
+            return image;
+        }
+
+        convertCanvasToImage(document.getElementById("cv"));
+    </script>
+</html>
