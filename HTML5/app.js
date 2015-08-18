@@ -130,4 +130,22 @@ app.get('/zingChartJsonData', function(req, res) {
 });
 
 
+app.get('/chinaMap', function(req, res) {
+    res.sendfile(__dirname +"/public/html/chinaMap.html");
+});
+app.get('/china.json', function(req, res) {
+    res.sendfile(__dirname +"\\china.json");
+});
+
+app.get('/southchinasea.svg', function(req, res) {
+    res.sendfile(__dirname +"\\southchinasea.svg");
+});
+app.get('/china.topojson', function(req, res) {
+    res.sendfile(__dirname +"\\china.topojson.txt");
+});
+
+app.get('/places.json', function(req, res) {
+    res.sendfile(__dirname +"\\places.json");
+});
+
 app.listen(3030);

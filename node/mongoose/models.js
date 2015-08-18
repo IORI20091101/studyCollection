@@ -19,6 +19,7 @@ _Member.statics.findByEmail= function(email, callback) {
     return this.model('Member').find({email: email}, callback);
 }
 
+
 //**在调用mogoose.model的时候回自动创建集合类似 Member ==》 members  ， Users ==》users
 //在此处注册model 名字为Model
 exports.Member = mongoose.model('Member', _Member);

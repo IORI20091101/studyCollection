@@ -6,6 +6,9 @@ var mongoose = require('mongoose');
 
 var models = require('./models');
 
+var photoModels = require('./photoModel');
+var photos = require('./routes/photos')
+
 var Member = models.Member;
 
 //mongoose.connect('mongodb://127.0.0.1:27017/mydb', {mongos: true});
@@ -136,6 +139,4 @@ app.get('/members', function(req, res) {
         res.json(doc);
     })
 })
-
-
 
