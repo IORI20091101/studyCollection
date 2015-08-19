@@ -12,6 +12,14 @@
     "ejs": "~2.3.3",
     "express": "~4.13.1",
     "morgan": "~1.6.1",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "colors":"0.5.0",
+    "jade":"1.8.2",
+    "socket.io":"0.9.2",
+    "websocket.io":"0.2.1",
+    "log4js":"*",
+    "request":"*",
+    "formidable":"*",
+    "mongoose":"*"
   }
 }

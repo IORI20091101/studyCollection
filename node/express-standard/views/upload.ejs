@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>upload <%= title%></title>
+        <link rel="stylesheet" href="/styles/upload.css"
+    </head>
+    <body>
+        <h1><%= title%></h1>
+        <p>Upload a photo to your account belw.</p>
+        <form method="POST" enctype="multipart/form-data" action="/photos/doUpload">
+            <p>
+                <input type="text", name="name", placeholder="Name"/>
+            </p>
+            <p>
+                <input type="file", name="image"/>
+            </p>
+            <p>
+                <input type="submit", value="Upload"/>
+            </p>
+        </form>
+    </body>
+</html>
