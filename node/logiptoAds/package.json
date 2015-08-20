@@ -1,14 +1,11 @@
 {
-  "name": "node",
+  "name": "log2address",
   "version": "0.0.1",
   "private": "true",
   "dependencies": {
-    "colors":"0.5.0",
-    "express":"3.0.4",
-    "jade":"1.8.2",
-    "ejs":"*",
     "socket.io":"0.9.2",
     "tail":"*",
+    "redis":"*",
     "underscore":"*"
   }
 }

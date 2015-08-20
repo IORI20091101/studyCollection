@@ -1,11 +1,13 @@
 var express = require("express");
 var app = express();
-
 var fs = require('fs');
 var readline = require('readline');
 var _ = require("underscore");
-console.log(__dirname);
+var util = require('util');
 
+var ipUtil = require("./utils/ipAddr");
+
+var ipData = ipUtil.ipData;
 app.use(express.static(__dirname + '/public'));
 
 app.use(express.bodyParser());
@@ -15,8 +17,9 @@ app.set('views',__dirname + '/views');
 app.set('view options',{layout: false});
 
 
-var readStream = fs.createReadStream(__dirname+ '\\tmp\\test.txt', {encoding: 'utf8'});
-var writeStream = fs.createWriteStream(__dirname+ '\\tmp\\data.json',{encoding: 'utf8'});
+
+var readStream = fs.createReadStream(__dirname+ '/tmp/test.txt', {encoding: 'utf8'});
+var writeStream = fs.createWriteStream(__dirname+ '/tmp/data.json',{encoding: 'utf8'});
 var rl = readline.createInterface({
     input: readStream,
     output:process.stdout,
@@ -81,6 +84,79 @@ rl.on('line', function(line) {
   //process.exit(0);
 });
 
+
+
+Tail = require('tail').Tail;
+
+tail = new Tail("./tmp/www.ezhe.com.log-20150811");
+
+tail.on("line", function(data) {
+  //console.log(data);
+  var idstr = ipUtil.dealLine(data);
+
+  if( !idstr ) {
+    console.log("error ip address!");
+    return false;
+  }
+
+  ipUtil.getIpInfo(idstr, function(err, msg) {
+        ipData.forEach(function(v) {
+            if( msg.province == v.name ) {
+                v.count++;
+            }
+        });
+      console.log('msg: ' + util.inspect(msg, true, 8));
+      console.log(ipData);
+
+    })
+});
+
+tail.on("error", function(error) {
+  console.log('ERROR: ', error);
+});
+
+
+
+app.get('/', function(req, res){
+  res.sendfile(__dirname +"/public/html/index.html");
+});
+
+
+app.get('/img2Code', function(req, res) {
+    res.sendfile(__dirname +"/public/html/canvasToStr.html");
+});
+
+app.get('/canvas2img', function(req, res) {
+    res.sendfile(__dirname +"/public/html/canvas2img.html");
+});
+
+
+
+app.get('/zingChart', function(req, res) {
+    //res.sendfile(__dirname +"/public/html/zingChart.html");
+    res.render("zingChart", {});
+});
+
+app.get('/zingChartJsonData', function(req, res) {
+    res.json(200, jsonData);
+});
+
+
+
+
+app.get('/chinaMap', function(req, res) {
+    res.sendfile(__dirname +"/public/html/chinaMap.html");
+});
+app.get('/china.json', function(req, res) {
+    res.sendfile(__dirname +"/china.json");
+});
+
+
+app.listen(3030);
+
+
+
+
 /*
 var readStream = fs.createReadStream(__dirname+ '\\tmp\\test.txt', {encoding: 'utf8'});
 var writeStream = fs.createWriteStream(__dirname+ '\\tmp\\data.json',{encoding: 'utf8'});
@@ -99,53 +175,3 @@ readStream.on('end', function() { // 当没有数据时，关闭数据流
     writeStream.end();
 });
 */
-
-app.set("name", "dongzhi")
-//app.locals.settings = app.settings;
-
-app.get('/', function(req, res){
-  res.sendfile(__dirname +"/public/html/index.html");
-});
-
-var i18n = {
-    age: 18
-}
-app.locals(i18n)
-
-app.get('/img2Code', function(req, res) {
-    res.sendfile(__dirname +"/public/html/canvasToStr.html");
-});
-
-app.get('/canvas2img', function(req, res) {
-    res.sendfile(__dirname +"/public/html/canvas2img.html");
-});
-
-app.get('/zingChart', function(req, res) {
-    //res.sendfile(__dirname +"/public/html/zingChart.html");
-    res.render("zingChart", {});
-});
-
-app.get('/zingChartJsonData', function(req, res) {
-    res.json(200, jsonData);
-});
-
-
-app.get('/chinaMap', function(req, res) {
-    res.sendfile(__dirname +"/public/html/chinaMap.html");
-});
-app.get('/china.json', function(req, res) {
-    res.sendfile(__dirname +"\\china.json");
-});
-
-app.get('/southchinasea.svg', function(req, res) {
-    res.sendfile(__dirname +"\\southchinasea.svg");
-});
-app.get('/china.topojson', function(req, res) {
-    res.sendfile(__dirname +"\\china.topojson.txt");
-});
-
-app.get('/places.json', function(req, res) {
-    res.sendfile(__dirname +"\\places.json");
-});
-
-app.listen(3030);
