@@ -58,7 +58,7 @@ rl.on('line', function(line) {
 
         xyArr.push(dataTmplArr);
     }
-
+    rl.prompt();
 
     //writeStream.write(line + '\n');
     //console.log("---------------------");

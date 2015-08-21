@@ -1,8 +1,10 @@
+var express = require("express");
+var app = express();
+var readline = require('readline');
 var _ = require("underscore");
-var util = require('util');
-var http = require('http');
-
-
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 //使用对象来设hash的值
 var redis = require('redis');
 var client = redis.createClient();
@@ -11,105 +13,23 @@ client.on('error', function(err) {
     consnole.log("Error " + err);
 });
 
+var server = require('http').Server(app);
 
-/**
- * 根据 ip 获取获取地址信息
- */
-var getIpInfo = function(ip, cb) {
-  var sina_server = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=';
-  var url = sina_server + ip;
-  http.get(url, function(res) {
-    var code = res.statusCode;
-    if (code == 200) {
-      res.on('data', function(data) {
-        try {
-          cb(null, JSON.parse(data));
-        } catch (err) {
-          cb(err);
-        }
-      });
-    } else {
-      cb({ code: code });
-    }
-  }).on('error', function(e) { cb(e); });
-};
-
-//处理读取到的日志数据并把ip地址 域名和时间解析出来
-var dealLine = function(data) {
-  var dataFinal = {};
-  var ipReg = /(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])/g;
-  var dateReg = /\[(.+)\]/g;
-  var webReg = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?\"/;
-
-  if( ipReg.test(data) ) {
-      var ip = data.match(ipReg);
-      dataFinal.ip = ip[0];
-  }
-
-  if( dateReg.test(data) ) {
-      var dateStr = data.match(dateReg);
-      dataFinal.dateStr = dateStr[0].slice(1,-7);
-  }
-
-  if( webReg.test(data) ) {
-      var web = data.match(webReg);
-      dataFinal.web = web[0].slice(0, -1);
-  }
-
-  if( !_.isEmpty(dataFinal) ) {
-    return dataFinal;
-  }
-  return false;
-
-}
+var io = require('socket.io')(server);
 
 
+io.on('connection', function (socket) {
 
+  socket.on("news", function(data) {
+    console.log(data);
+  });
+  socket.emit("news", {"hello":"world"})
 
-
-var totalCount = 0;
-
-Tail = require('tail').Tail;
-
-tail = new Tail("./tmpDoc/www.ezhe.com.log-20150811");
-
-tail.on("line", function(data) {
-  var dataOri = dealLine(data);
-
-  if( !dataOri || _.isEmpty(dataOri) ) {
-    //console.log("ip address error!");
-    return false;
-  }
-
-  getIpInfo(dataOri.ip, function(err, msg) {
-        if( !msg.province ) {
-          //console.log("no province");
-          return false;
-        }
-        dataOri.province = msg.province;
-
-        ipData.forEach(function(v) {
-            if( msg.province == v.name ) {
-                v.count++;
-                client.hset("ezheLogTotal", "province_"+v.id, v.count+"-"+ dataOri.dateStr +"-"+ dataOri.web);
-
-                client.set("ezheLog_"+dataOri.dateStr, v.id + "-" + dataOri.web);
-                client.expire("ezheLog_"+dataOri.dateStr, 60);
-            }
-        });
-
-        totalCount++;
-
-        client.hset("ezheLogTotal", "totalCount", totalCount);
-
-    })
-});
-
-tail.on("error", function(error) {
-  console.log('ERROR: ', error);
 });
 
 
+
+server.listen(3030);
 
 
 var ipData = [
@@ -284,4 +204,59 @@ var ipData = [
         name:"台湾"
     }
 ];
+
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(__dirname + '/public'));
+
+
+app.set('view engine','ejs');
+app.set('views',__dirname + '/views');
+app.set('view options',{layout: false});
+
+
+
+
+app.get('/', function(req, res) {
+    res.sendFile(__dirname +"/public/html/chinaMap.html");
+});
+
+
+app.get('/getJsonData', function(req, res) {
+    var data = {};
+    client.hkeys("ezheLogTotal", function(err, results) {
+        if(err) {
+            consnole.log(err);
+            return false;
+        }
+        var len = results.length;
+        results.forEach(function(result, i) {
+            client.hget("ezheLogTotal", result, function(err,val) {
+                if(err) {
+                    consnole.log(err);
+                    return false;
+                }
+                if( result == "totalCount" ) {
+                    data.totalCount = val;
+                } else {
+                    data[result.split("_")[1]] = val;
+                }
+
+                if( i == (len -1) ) {
+                    res.status(200).json({ data:data  })
+                }
+            })
+        })
+    })
+
+});
+
+
+
+app.get('/china.json', function(req, res) {
+    res.sendFile(__dirname +"/china.json");
+});
 
