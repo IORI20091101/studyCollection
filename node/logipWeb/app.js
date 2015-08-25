@@ -8,10 +8,10 @@ var bodyParser = require('body-parser');
 //使用对象来设hash的值
 var redis = require('redis');
 var client = redis.createClient();
+var client2 = redis.createClient();
 
-client.on('error', function(err) {
-    consnole.log("Error " + err);
-});
+
+
 
 var server = require('http').Server(app);
 
@@ -227,14 +227,14 @@ app.get('/', function(req, res) {
 
 app.get('/getJsonData', function(req, res) {
     var data = {};
-    client.hkeys("ezheLogTotal", function(err, results) {
+    client2.hkeys("ezheLogTotal", function(err, results) {
         if(err) {
             consnole.log(err);
             return false;
         }
         var len = results.length;
         results.forEach(function(result, i) {
-            client.hget("ezheLogTotal", result, function(err,val) {
+            client2.hget("ezheLogTotal", result, function(err,val) {
                 if(err) {
                     consnole.log(err);
                     return false;
@@ -258,5 +258,23 @@ app.get('/getJsonData', function(req, res) {
 
 app.get('/china.json', function(req, res) {
     res.sendFile(__dirname +"/china.json");
+});
+
+
+
+client.on("subscribe", function (channel, count) {
+    console.log("client1 channel " + channel + ": " + count);
+
+});
+
+client.on("message", function (channel, message) {
+    console.log("client1 channel " + channel + ": " + message);
+
+});
+
+client.subscribe("ezhelog");
+
+client.on('error', function(err) {
+    consnole.log("Error " + err);
 });
 
