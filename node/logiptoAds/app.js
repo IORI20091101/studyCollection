@@ -7,8 +7,9 @@ var http = require('http');
 var redis = require('redis');
 var client = redis.createClient();
 
+
 client.on('error', function(err) {
-    consnole.log("Error " + err);
+    console.log("Error " + err);
 });
 
 
@@ -69,9 +70,15 @@ var dealLine = function(data) {
 
 var totalCount = 0;
 
+
 Tail = require('tail').Tail;
 
-tail = new Tail("./tmpDoc/www.ezhe.com.log-20150811");
+var fileToTail = "./tmpDoc/www.ezhe.com.log-20150811";
+var lineSeparator= "\n";
+var fromBeginning = false;
+var watchOptions = {}; //as per node fs.watch documentations
+
+tail = new Tail(fileToTail, lineSeparator, watchOptions,fromBeginning)
 
 tail.on("line", function(data) {
   var dataOri = dealLine(data);
@@ -80,7 +87,7 @@ tail.on("line", function(data) {
     //console.log("ip address error!");
     return false;
   }
-
+console.log("-----getLinedata: " + data);
   getIpInfo(dataOri.ip, function(err, msg) {
         if( !msg.province ) {
           //console.log("no province");
@@ -101,6 +108,10 @@ tail.on("line", function(data) {
         totalCount++;
 
         client.hset("ezheLogTotal", "totalCount", totalCount);
+
+        client.publish("ezhelog", "hello");
+
+        console.log(totalCount);
 
     })
 });
