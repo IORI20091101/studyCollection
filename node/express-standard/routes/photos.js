@@ -86,4 +86,17 @@ router.post('/doUpload', function(req, res, next) {
 
 })
 
+router.get("/:id/download", function(req, res, next) {
+    var _id = req.params.id;
+
+
+    Photo.find({_id: _id}, function(err, result) {
+        var pathUrl = path.join("/Users/toshiba/Documents/git-workspace/gitHub/studyCollection/node/express-standard/tmp/photos" , result[0].path.split("tmp/photos")[1]);
+        console.log(pathUrl);
+        //res.sendFile(pathUrl);
+
+        res.download(pathUrl, result[0].name + ".jpeg")
+    });
+})
+
 module.exports = router;
