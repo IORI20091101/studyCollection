@@ -182,7 +182,21 @@
             socket.on('news', function (data) {
                 console.log(data);
             });
+
+
             socket.emit('news', {"world":"hello"})
+
+            var deb = _.debounce(function() {
+                            console.log(12345);
+                            location.reload();
+                        }, 800);
+
+            socket.on('getNewIp', function(res) {
+                console.log(res);
+                    if( res.code == 200 ) {
+                        deb();
+                    }
+            })
 
             var width  = 1000;
             var height = 1000;

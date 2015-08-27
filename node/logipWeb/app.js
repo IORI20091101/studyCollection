@@ -9,7 +9,8 @@ var bodyParser = require('body-parser');
 var redis = require('redis');
 var client = redis.createClient();
 var client2 = redis.createClient();
-
+client.auth("123456");
+client2.auth("123456");
 
 
 
@@ -17,17 +18,14 @@ var server = require('http').Server(app);
 
 var io = require('socket.io')(server);
 
-
 io.on('connection', function (socket) {
+    socket.on('news', function(res) {
+        console.log(res);
+    })
 
-  socket.on("news", function(data) {
-    console.log(data);
-  });
   socket.emit("news", {"hello":"world"})
 
 });
-
-
 
 server.listen(3030);
 
@@ -229,14 +227,14 @@ app.get('/getJsonData', function(req, res) {
     var data = {};
     client2.hkeys("ezheLogTotal", function(err, results) {
         if(err) {
-            consnole.log(err);
+            console.log(err);
             return false;
         }
         var len = results.length;
         results.forEach(function(result, i) {
             client2.hget("ezheLogTotal", result, function(err,val) {
                 if(err) {
-                    consnole.log(err);
+                    console.log(err);
                     return false;
                 }
                 if( result == "totalCount" ) {
@@ -267,14 +265,17 @@ client.on("subscribe", function (channel, count) {
 
 });
 
+
 client.on("message", function (channel, message) {
     console.log("client1 channel " + channel + ": " + message);
+    //io.sockets.emit("getNewIp", {code: 200});
+    io.sockets.emit('getNewIp',{code: 200});
 
 });
 
 client.subscribe("ezhelog");
 
 client.on('error', function(err) {
-    consnole.log("Error " + err);
+    console.log("Error " + err);
 });
 

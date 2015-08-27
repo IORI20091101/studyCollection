@@ -4,10 +4,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require("express-session");
+
+var messages = require('./lib/messages');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var photos = require('./routes/photos');
+var passport = require('./routes/passport');
 
 var app = express();
 
@@ -23,18 +27,20 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/tmp',express.static(path.join(__dirname, 'tmp')));
-
+app.use(messages);
 
 app.use('/', routes);
 app.use('/users', users);
+app.user('/passport', passport);
 
 //程序级变量可以在页面中获取
-app.locals = {
-  age: 18,
-  nick: "xiaobai"
-}
+// app.locals = {
+//   age: 18,
+//   nick: "xiaobai"
+// }
 app.use('/photos', photos);
 
 // catch 404 and forward to error handler

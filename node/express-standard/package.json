@@ -20,6 +20,8 @@
     "log4js":"*",
     "request":"*",
     "formidable":"*",
-    "mongoose":"*"
+    "mongoose":"*",
+    "redis":"*",
+    "bcrypt":"*"
   }
 }
