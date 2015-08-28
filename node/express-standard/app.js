@@ -4,7 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require("express-session");
+var session = require('express-session');
+
 
 var messages = require('./lib/messages');
 
@@ -30,11 +31,11 @@ app.use(cookieParser());
 app.use(session());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/tmp',express.static(path.join(__dirname, 'tmp')));
-app.use(messages);
+app.use(messages());
 
 app.use('/', routes);
 app.use('/users', users);
-app.user('/passport', passport);
+app.use('/passport', passport);
 
 //程序级变量可以在页面中获取
 // app.locals = {

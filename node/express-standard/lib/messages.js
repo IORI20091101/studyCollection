@@ -10,7 +10,7 @@ res.message = function(msg, type) {
 }
 
 
-req.error = function(msg) {
+res.error = function(msg) {
     return this.message(msg, 'error');
 }
 

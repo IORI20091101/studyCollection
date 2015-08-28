@@ -22,6 +22,7 @@
     "formidable":"*",
     "mongoose":"*",
     "redis":"*",
-    "bcrypt":"*"
+    "bcrypt":"*",
+    "express-session":"*"
   }
 }
