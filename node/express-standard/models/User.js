@@ -1,6 +1,6 @@
 var redis = require("redis");
 var bcrypt = require("bcrypt");
-
+var _ = require("underscore");
 var db = redis.createClient();
 
 //db.auth("123456");
@@ -86,15 +86,19 @@ User.get = function(id, fn) {
 User.authenticate = function(name, pass, fn) {
     User.getByName(name, function(err, user) {
         if(err) return fn(err);
-        if(!user.id) return fn();
-        bcrypt.hash(pass, user.salt, function(err, hash) {
-            if(err) return fn(err);
-            if(hash == user.pass) {
-                return fn(null, user);
-            }
+        if(_.isEmpty(user)) {
+            return fn();
+        } else {
+            bcrypt.hash(pass, user.salt, function(err, hash) {
+                if(err) return fn(err);
+                if(hash == user.pass) {
+                    return fn(null, user);
+                }
 
-            fn();
-        })
+                fn();
+            })
+        }
+
     });
 }
 

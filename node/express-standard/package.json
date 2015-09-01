@@ -23,6 +23,7 @@
     "mongoose":"*",
     "redis":"*",
     "bcrypt":"*",
+    "underscore":"*",
     "cookie-session":"*"
   }
 }
