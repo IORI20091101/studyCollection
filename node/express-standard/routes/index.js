@@ -4,7 +4,7 @@ var router = express.Router();
 var myUtil = require("../utils/myUtil");
 
 
-var Robot = require("../utils/robot.js");
+var Robot = require("../utils/robot");
 
 
 /* GET home page. */

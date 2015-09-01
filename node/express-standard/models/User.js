@@ -3,9 +3,8 @@ var bcrypt = require("bcrypt");
 
 var db = redis.createClient();
 
-db.auth("123456");
+//db.auth("123456");
 
-module.explorts = User;
 
 function User(obj) {
     for( var key in obj ) {
@@ -15,6 +14,8 @@ function User(obj) {
 
 User.prototype.save = function(fn) {
     if( this.id ) {
+        console.log("用户名已经被占用，请重新选择～～～");
+        return false;
         this.update(fn);
     } else {
         var user = this;
@@ -68,11 +69,13 @@ User.getByName = function(name, fn) {
 
 
 User.getId = function(name, fn) {
-    User.get("user:id"+name, fn);
+    db.get("user:id:"+name, fn);
 }
 
 User.get = function(id, fn) {
+    console.log(id);
     db.hgetall('user:' + id, function(err, user) {
+        console.log(user);
         if(err) return fn(err);
         fn(null, new User(user));
     })
@@ -94,6 +97,10 @@ User.authenticate = function(name, pass, fn) {
         })
     });
 }
+
+
+module.exports = User;
+
 
 
 // var tobi = new User({

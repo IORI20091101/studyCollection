@@ -1,4 +1,5 @@
-<% if(locals.messages) %>
+<% if(locals.messages) { %>
     <% messages.forEach(function(message) {%>
-        <p class='<%= message.type%>'><%= message.string %></p>
+        <p class='<%= message.type %>'><%= message.string %></p>
     <%}) %>
+<% } %>

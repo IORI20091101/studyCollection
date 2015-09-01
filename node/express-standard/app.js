@@ -4,17 +4,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require('express-session');
-
-
-var messages = require('./lib/messages');
+var cookieSession = require('cookie-session')
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var photos = require('./routes/photos');
 var passport = require('./routes/passport');
 
+var User = require('./models/User');
+
 var app = express();
+
 
 //set upload photos
 app.set('photos', path.join(__dirname, '.tmp/photos'));
@@ -28,10 +28,27 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/tmp',express.static(path.join(__dirname, 'tmp')));
-app.use(messages());
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}))
+
+
+app.use(function(req, res, next) {
+  var uid = req.session.uid;
+  if(!uid) return next();
+  User.get(uid, function(err, user) {
+    if(err) return next(err);
+    req.user = res.locals.user = user;
+    next();
+  })
+});
+
+
+app.locals.messages = [{type: "hello", string:"$$$this is a test~~"}]
 
 app.use('/', routes);
 app.use('/users', users);
@@ -42,6 +59,7 @@ app.use('/passport', passport);
 //   age: 18,
 //   nick: "xiaobai"
 // }
+
 app.use('/photos', photos);
 
 // catch 404 and forward to error handler

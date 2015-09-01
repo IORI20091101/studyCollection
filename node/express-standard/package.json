@@ -23,6 +23,6 @@
     "mongoose":"*",
     "redis":"*",
     "bcrypt":"*",
-    "express-session":"*"
+    "cookie-session":"*"
   }
 }

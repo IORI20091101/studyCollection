@@ -1,14 +1,16 @@
 var express = require('express');
 var router = express.Router();
+var User = require("../models/User");
+
 
 router.get('/register', function(req, res, next) {
     res.render('register', {title: 'Register'});
 });
 
 router.post('/register', function(req, res, next) {
-    User.getByName(data.name, function(er, user) {
+    var data = req.body;
+    User.getByName(data.name, function(err, user) {
         if(err) return next(err);
-
         if(user.id) {
             res.error("Username already taken!");
             res.redirect("back");
@@ -32,8 +34,7 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
-    var data = req.body.user;
-
+    var data = req.body;
     User.authenticate(data.name, data.pass, function(err, user) {
         if(err) return next(err);
         if(user) {
@@ -46,10 +47,10 @@ router.post('/login', function(req, res, next) {
     });
 })
 
-router.post('/logout', function(req, res, next){
-    req.session.destroy(function(err) {
-        if(err) throw err;
-        res.redirect('/');
+router.get('/logout', function(req, res, next){
+    req.session.uid = null;
+    res.redirect('/passport/login');
 
-    });
 });
+
+module.exports = router;
