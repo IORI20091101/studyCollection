@@ -91,15 +91,17 @@ readStream.on("end", function() {
                 return v.ip;
             });
             platform = key;
-            if( key == "www.ezhe.com" || "dohko.www.ezhe.com" ) {
+
+            console.log(key);
+            if( key == "www.ezhe.com" || key == "dohko.www.ezhe.com" ) {
                 wwwPV = val.length;
                 wwwUV = uniqtotal.length;
 
-            } else if( key == "m.ezhe.com" || "dohko.m.ezhe.com") {
+            } else if( key == "m.ezhe.com" || key =="dohko.m.ezhe.com") {
                 wapPV = val.length;
                 wapUV = uniqtotal.length;
 
-            } else if( key == "api.ezhe.com" || "dohko.api.ezhe.com" ) {
+            } else if( key == "api.ezhe.com" || key =="dohko.api.ezhe.com" ) {
                 apiPV = val.length;
                 apiUV = uniqtotal.length;
 
