@@ -4,6 +4,8 @@ var path = require('path');
 
 var fs = require('fs');
 
+var async = require("async");
+
 var readline = require("readline");
 
 
@@ -59,7 +61,14 @@ readStream.on("end", function() {
         return v.dateFinal;
     });
 
+
+    var keyArr = [];
     _.each(ipDataSort, function(j,l) {
+        keyArr.push(l);
+    });
+
+    _.each(ipDataSort, function(j,l) {
+
         var groupData = _.groupBy(j, function(val) {
             return val.web;
         })
@@ -110,68 +119,7 @@ readStream.on("end", function() {
 
         });
 
-        pool.getConnection(function(err, conn) {
-            if( err ) console.log("POOL ==>" + err);
 
-
-
-            conn.query('select * from tbl_ip_statistics where date = "'+ l +'"',[] ,function(err, results) {
-                if( err ) console.log(err);
-
-
-                if( results && results.length == 0 ) {
-                    var selectSQL = 'insert into tbl_ip_statistics(date, wwwPV, apiPV, wapPV, wwwUV, apiUV, wapUV ) values(?,?,?,?,?,?,?)';
-
-                    pool.getConnection(function(err, conn) {
-                        if( err ) console.log("POOL ==>" + err);
-
-
-
-                        conn.query(selectSQL,[ l, wwwPV, apiPV, wapPV, wwwUV, apiUV, wapUV ] ,function(err, rows) {
-                            if( err ) console.log(err);
-
-                            if( rows.affectedRows == 1 ) {
-                                console.log("插入数据成功！");
-                            }
-
-                            conn.release();
-                        });
-
-                    });
-                } else {
-
-                    var resulsData  = results[0];
-                    wwwPV += resulsData.wwwPV;
-                    apiPV += resulsData.apiPV;
-                    wapPV += resulsData.wapPV;
-                    wwwUV += resulsData.wwwUV;
-                    apiUV += resulsData.apiUV;
-                    wapUV += resulsData.wapUV;
-
-                    var updateSQL = 'update tbl_ip_statistics set wwwPV=?, apiPV=?, wapPV=?, wwwUV=?, apiUV= ?, wapUV= ? where id= ' + resulsData.id;
-                    pool.getConnection(function(err, conn) {
-                        if( err ) console.log("POOL ==>" + err);
-
-
-                        conn.query(updateSQL,[  wwwPV, apiPV, wapPV, wwwUV, apiUV, wapUV ] ,function(err, rows) {
-                            if( err ) console.log(err);
-
-                                if( rows.changedRows > 0 ) {
-                                    console.log("更新数据成功！");
-
-                                }
-
-                            conn.release();
-                        });
-
-                    });
-                }
-
-
-                conn.release();
-            });
-
-        });
 
 
         var hourData =_.groupBy(j, function(item, i) {
@@ -190,199 +138,277 @@ readStream.on("end", function() {
 
 
 
-
-        pool.getConnection(function(err, conn) {
-            if( err ) console.log("POOL ==>" + err);
-
-            conn.query('select * from tbl_ip_time_statisitcs where date = "'+ l +'"',[] ,function(err, results) {
-                if( err ) console.log(err);
+        async.series([function(cb) {
+            pool.getConnection(function(err, conn) {
+                if( err ) console.log("POOL ==>" + err);
 
 
-                if( results && results.length == 0 ) {
-                    var insertSql = 'insert into tbl_ip_time_statisitcs('+
-                        'date,'+
-                        ' hour1,'+
-                        ' hour2,'+
-                        ' hour3,'+
-                        ' hour4,'+
-                        ' hour5,'+
-                        ' hour6,'+
-                        ' hour7,'+
-                        ' hour8,'+
-                        ' hour9,'+
-                        ' hour10,'+
-                        ' hour11,'+
-                        ' hour12,'+
-                        ' hour13,'+
-                        ' hour14,'+
-                        ' hour15,'+
-                        ' hour16,'+
-                        ' hour17,'+
-                        ' hour18,'+
-                        ' hour19,'+
-                        ' hour20,'+
-                        ' hour21,'+
-                        ' hour22,'+
-                        ' hour23,'+
-                        ' hour24'+
-                        ' ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+
+                conn.query('select * from tbl_ip_statistics where date = "'+ l +'"',[] ,function(err, results) {
+                    if( err ) console.log(err);
 
 
-                    pool.getConnection(function(err, conn) {
-                        if( err ) console.log("POOL ==>" + err);
+                    if( results && results.length == 0 ) {
+                        var selectSQL = 'insert into tbl_ip_statistics(date, wwwPV, apiPV, wapPV, wwwUV, apiUV, wapUV ) values(?,?,?,?,?,?,?)';
 
-                        conn.query(insertSql,[
-                            l,
-                            hourData[0].length,
-                            hourData[1].length,
-                            hourData[2].length,
-                            hourData[3].length,
-                            hourData[4].length,
-                            hourData[5].length,
-                            hourData[6].length,
-                            hourData[7].length,
-                            hourData[8].length,
-                            hourData[9].length,
-                            hourData[10].length,
-                            hourData[11].length,
-                            hourData[12].length,
-                            hourData[13].length,
-                            hourData[14].length,
-                            hourData[15].length,
-                            hourData[16].length,
-                            hourData[17].length,
-                            hourData[18].length,
-                            hourData[19].length,
-                            hourData[20].length,
-                            hourData[21].length,
-                            hourData[22].length,
-                            hourData[23].length
-                           ] ,function(err, rows) {
-                            if( err ) console.log(err);
-                            if( rows.affectedRows == 1 ) {
-                                console.log("插入数据成功！");
-                            }
-                            conn.release();
+                        pool.getConnection(function(err, conn) {
+                            if( err ) console.log("POOL ==>" + err);
+
+
+
+                            conn.query(selectSQL,[ l, wwwPV, apiPV, wapPV, wwwUV, apiUV, wapUV ] ,function(err, rows) {
+                                if( err ) console.log(err);
+
+                                if( rows.affectedRows == 1 ) {
+                                    console.log("插入数据成功！");
+                                    cb(null,10);
+                                }
+
+                                conn.release();
+                            });
+
                         });
+                    } else {
 
-                    });
-                } else {
+                        var resulsData  = results[0];
+                        wwwPV += resulsData.wwwPV;
+                        apiPV += resulsData.apiPV;
+                        wapPV += resulsData.wapPV;
+                        wwwUV += resulsData.wwwUV;
+                        apiUV += resulsData.apiUV;
+                        wapUV += resulsData.wapUV;
 
-                    var resData  = results[0];
-                    var hour1 = hourData[0].length + resData.hour1;
-                    var hour2 = hourData[1].length + resData.hour2;
-                    var hour3 = hourData[2].length + resData.hour3;
-                    var hour4 = hourData[3].length + resData.hour4;
-                    var hour5 = hourData[4].length + resData.hour5;
-                    var hour6 = hourData[5].length + resData.hour6;
-                    var hour7 = hourData[6].length + resData.hour7;
-                    var hour8 = hourData[7].length + resData.hour8;
-                    var hour9 = hourData[8].length + resData.hour9;
-                    var hour10 = hourData[9].length + resData.hour10;
-                    var hour11 = hourData[10].length + resData.hour11;
-                    var hour12 = hourData[11].length + resData.hour12;
-                    var hour13 = hourData[12].length + resData.hour13;
-                    var hour14 = hourData[13].length + resData.hour14;
-                    var hour15 = hourData[14].length + resData.hour15;
-                    var hour16 = hourData[15].length + resData.hour16;
-                    var hour17 = hourData[16].length + resData.hour17;
-                    var hour18 = hourData[17].length + resData.hour18;
-                    var hour19 = hourData[18].length + resData.hour19;
-                    var hour20 = hourData[19].length + resData.hour20;
-                    var hour21 = hourData[20].length + resData.hour21;
-                    var hour22 = hourData[21].length + resData.hour22;
-                    var hour23 = hourData[22].length + resData.hour23;
-                    var hour24 = hourData[23].length + resData.hour24;
+                        var updateSQL = 'update tbl_ip_statistics set wwwPV=?, apiPV=?, wapPV=?, wwwUV=?, apiUV= ?, wapUV= ? where id= ' + resulsData.id;
+                        pool.getConnection(function(err, conn) {
+                            if( err ) console.log("POOL ==>" + err);
 
 
-                    var updateSQL = 'update tbl_ip_time_statisitcs set hour1 = ?,' +
-                                                                       'hour2 = ?,' +
-                                                                       'hour3 = ?,' +
-                                                                       'hour4 = ?,' +
-                                                                       'hour5 = ?,' +
-                                                                       'hour6 = ?,' +
-                                                                       'hour7 = ?,' +
-                                                                       'hour8 = ?,' +
-                                                                       'hour9 = ?,' +
-                                                                       'hour10 = ?,' +
-                                                                       'hour11 = ?,' +
-                                                                       'hour12 = ?,' +
-                                                                       'hour13 = ?,' +
-                                                                       'hour14 = ?,' +
-                                                                       'hour15 = ?,' +
-                                                                       'hour16 = ?,' +
-                                                                       'hour17 = ?,' +
-                                                                       'hour18 = ?,' +
-                                                                       'hour19 = ?,' +
-                                                                       'hour20 = ?,' +
-                                                                       'hour21 = ?,' +
-                                                                       'hour22 = ?,' +
-                                                                       'hour23 = ?,' +
-                                                                       'hour24 = ? ' +
-                                                                       'where id= ' +resData.id;
+                            conn.query(updateSQL,[  wwwPV, apiPV, wapPV, wwwUV, apiUV, wapUV ] ,function(err, rows) {
+                                if( err ) console.log(err);
 
+                                    if( rows.changedRows > 0 ) {
+                                        console.log("更新数据成功！");
+                                        cb(null, 11);
 
-                    pool.getConnection(function(err, conn) {
-                        if( err ) console.log("POOL ==>" + err);
+                                    }
 
+                                conn.release();
+                            });
 
-                        conn.query(updateSQL,[
-                            hour1,
-                            hour2,
-                            hour3,
-                            hour4,
-                            hour5,
-                            hour6,
-                            hour7,
-                            hour8,
-                            hour9,
-                            hour10,
-                            hour11,
-                            hour12,
-                            hour13,
-                            hour14,
-                            hour15,
-                            hour16,
-                            hour17,
-                            hour18,
-                            hour19,
-                            hour20,
-                            hour21,
-                            hour22,
-                            hour23,
-                            hour24
-                        ] ,function(err, rows) {
-                            if( err ) console.log(err);
-
-                            if( rows.changedRows > 0 ) {
-                                console.log("更新数据成功！");
-
-                            }
-
-
-
-
-                            conn.release();
                         });
-
-                    });
-                }
+                    }
 
 
-                conn.release();
+                    conn.release();
+                });
+
             });
+        }, function(cb) {
+                pool.getConnection(function(err, conn) {
+                if( err ) console.log("POOL ==>" + err);
 
+                conn.query('select * from tbl_ip_time_statisitcs where date = "'+ l +'"',[] ,function(err, results) {
+                    if( err ) console.log(err);
+
+
+                    if( results && results.length == 0 ) {
+                        var insertSql = 'insert into tbl_ip_time_statisitcs('+
+                            'date,'+
+                            ' hour1,'+
+                            ' hour2,'+
+                            ' hour3,'+
+                            ' hour4,'+
+                            ' hour5,'+
+                            ' hour6,'+
+                            ' hour7,'+
+                            ' hour8,'+
+                            ' hour9,'+
+                            ' hour10,'+
+                            ' hour11,'+
+                            ' hour12,'+
+                            ' hour13,'+
+                            ' hour14,'+
+                            ' hour15,'+
+                            ' hour16,'+
+                            ' hour17,'+
+                            ' hour18,'+
+                            ' hour19,'+
+                            ' hour20,'+
+                            ' hour21,'+
+                            ' hour22,'+
+                            ' hour23,'+
+                            ' hour24'+
+                            ' ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+
+
+                        pool.getConnection(function(err, conn) {
+                            if( err ) console.log("POOL ==>" + err);
+
+                            conn.query(insertSql,[
+                                l,
+                                hourData[0].length,
+                                hourData[1].length,
+                                hourData[2].length,
+                                hourData[3].length,
+                                hourData[4].length,
+                                hourData[5].length,
+                                hourData[6].length,
+                                hourData[7].length,
+                                hourData[8].length,
+                                hourData[9].length,
+                                hourData[10].length,
+                                hourData[11].length,
+                                hourData[12].length,
+                                hourData[13].length,
+                                hourData[14].length,
+                                hourData[15].length,
+                                hourData[16].length,
+                                hourData[17].length,
+                                hourData[18].length,
+                                hourData[19].length,
+                                hourData[20].length,
+                                hourData[21].length,
+                                hourData[22].length,
+                                hourData[23].length
+                               ] ,function(err, rows) {
+                                if( err ) console.log(err);
+                                if( rows.affectedRows == 1 ) {
+                                    console.log("插入数据成功！");
+                                    cb(null,20);
+                                }
+                                conn.release();
+                            });
+
+                        });
+                    } else {
+
+                        var resData  = results[0];
+                        var hour1 = hourData[0].length + resData.hour1;
+                        var hour2 = hourData[1].length + resData.hour2;
+                        var hour3 = hourData[2].length + resData.hour3;
+                        var hour4 = hourData[3].length + resData.hour4;
+                        var hour5 = hourData[4].length + resData.hour5;
+                        var hour6 = hourData[5].length + resData.hour6;
+                        var hour7 = hourData[6].length + resData.hour7;
+                        var hour8 = hourData[7].length + resData.hour8;
+                        var hour9 = hourData[8].length + resData.hour9;
+                        var hour10 = hourData[9].length + resData.hour10;
+                        var hour11 = hourData[10].length + resData.hour11;
+                        var hour12 = hourData[11].length + resData.hour12;
+                        var hour13 = hourData[12].length + resData.hour13;
+                        var hour14 = hourData[13].length + resData.hour14;
+                        var hour15 = hourData[14].length + resData.hour15;
+                        var hour16 = hourData[15].length + resData.hour16;
+                        var hour17 = hourData[16].length + resData.hour17;
+                        var hour18 = hourData[17].length + resData.hour18;
+                        var hour19 = hourData[18].length + resData.hour19;
+                        var hour20 = hourData[19].length + resData.hour20;
+                        var hour21 = hourData[20].length + resData.hour21;
+                        var hour22 = hourData[21].length + resData.hour22;
+                        var hour23 = hourData[22].length + resData.hour23;
+                        var hour24 = hourData[23].length + resData.hour24;
+
+
+                        var updateSQL = 'update tbl_ip_time_statisitcs set hour1 = ?,' +
+                                                                           'hour2 = ?,' +
+                                                                           'hour3 = ?,' +
+                                                                           'hour4 = ?,' +
+                                                                           'hour5 = ?,' +
+                                                                           'hour6 = ?,' +
+                                                                           'hour7 = ?,' +
+                                                                           'hour8 = ?,' +
+                                                                           'hour9 = ?,' +
+                                                                           'hour10 = ?,' +
+                                                                           'hour11 = ?,' +
+                                                                           'hour12 = ?,' +
+                                                                           'hour13 = ?,' +
+                                                                           'hour14 = ?,' +
+                                                                           'hour15 = ?,' +
+                                                                           'hour16 = ?,' +
+                                                                           'hour17 = ?,' +
+                                                                           'hour18 = ?,' +
+                                                                           'hour19 = ?,' +
+                                                                           'hour20 = ?,' +
+                                                                           'hour21 = ?,' +
+                                                                           'hour22 = ?,' +
+                                                                           'hour23 = ?,' +
+                                                                           'hour24 = ? ' +
+                                                                           'where id= ' +resData.id;
+
+
+                        pool.getConnection(function(err, conn) {
+                            if( err ) console.log("POOL ==>" + err);
+
+
+                            conn.query(updateSQL,[
+                                hour1,
+                                hour2,
+                                hour3,
+                                hour4,
+                                hour5,
+                                hour6,
+                                hour7,
+                                hour8,
+                                hour9,
+                                hour10,
+                                hour11,
+                                hour12,
+                                hour13,
+                                hour14,
+                                hour15,
+                                hour16,
+                                hour17,
+                                hour18,
+                                hour19,
+                                hour20,
+                                hour21,
+                                hour22,
+                                hour23,
+                                hour24
+                            ] ,function(err, rows) {
+                                if( err ) console.log(err);
+
+                                if( rows.changedRows > 0 ) {
+                                    console.log("更新数据成功！");
+                                    cb(null,21);
+
+                                }
+
+
+
+
+                                conn.release();
+                            });
+
+                        });
+                    }
+
+
+                    conn.release();
+                });
+
+            });
+        }], function(err, results) {
+            if( keyArr[keyArr.length - 1] == l ) {
+                console.log(results);
+                process.exit(0);
+            }
         });
+
+
+
+
+
 
 
     })
 
 });
 
-
+/*
 setTimeout(function() {
     process.exit(0);
-}, 30000)
+}, 30000)*/
 
 var regional = {
     "january" : "01", "february":"02", "march":"03", "april":"04", "may":"05", "june":"06", "july":"07", "august":"08", "september":"09", "october":"10", "november":"11", "december":"12"
