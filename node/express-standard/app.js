@@ -10,6 +10,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var photos = require('./routes/photos');
 var passport = require('./routes/passport');
+var entry = require('./routes/entry');
 
 var User = require('./models/User');
 
@@ -53,6 +54,7 @@ app.locals.messages = [{type: "hello", string:"$$$this is a test~~"}]
 app.use('/', routes);
 app.use('/users', users);
 app.use('/passport', passport);
+app.use('/entry', entry);
 
 //程序级变量可以在页面中获取
 // app.locals = {
