@@ -4,15 +4,21 @@ var router = express.Router();
 var validate = require('../lib/validate');
 
 var Entry = require('../models/Entry');
+
+var page = require('../lib/page');
+
 /* GET users listing. */
-router.get('/list', function(req, res, next) {
-    Entry.getRange(0,-1, function(err, entries) {
-        if(err) return next(err);
-        res.render('entries', {
-            title: 'Entries',
-            entries: entries
+router.get('/list',
+    page(2),
+    function(req, res, next) {
+        console.log(req.page);
+        Entry.getRange(req.page.from, req.page.to, function(err, entries) {
+            if(err) return next(err);
+            res.render('entries', {
+                title: 'Entries',
+                entries: entries
+            })
         })
-    })
 
 });
 
@@ -24,6 +30,7 @@ router.post('/post',
     validate.required('title'),
     validate.lengthAbove('title', 4),
     function(req, res, next) {
+        console.log(123456);
         var data = req.body;
         /*if( !data.title ) {
             res.error('Title is required.');
@@ -42,7 +49,7 @@ router.post('/post',
             "title": data.title,
             "body" : data.body
         });
-
+console.log(entry);
 
         entry.save(function(err) {
             if(err) return next(err);

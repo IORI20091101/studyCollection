@@ -2,7 +2,6 @@ var redis = require('redis');
 
 var db = redis.createClient();
 
-module.exports = Entry;
 
 function Entry(obj) {
     for( var key in obj ) {
@@ -13,7 +12,6 @@ function Entry(obj) {
 
 Entry.prototype.save = function(fn) {
     var entryJSON = JSON.stringify(this);
-console.log(entryJSON);
     db.lpush('entries', entryJSON, function(err) {
         if(err) return fn(err);
         fn();
@@ -33,3 +31,11 @@ Entry.getRange = function(from, to, fn) {
         fn(null, entries);
     });
 }
+
+Entry.count = function(fn) {
+    db.llen('entries', function(err,total) {
+        fn(total);
+    });
+}
+
+module.exports = Entry;

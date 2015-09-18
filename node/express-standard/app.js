@@ -11,6 +11,7 @@ var users = require('./routes/users');
 var photos = require('./routes/photos');
 var passport = require('./routes/passport');
 var entry = require('./routes/entry');
+var api = require('/routes/entry');
 
 var User = require('./models/User');
 
@@ -49,12 +50,13 @@ app.use(function(req, res, next) {
 });
 
 
-app.locals.messages = [{type: "hello", string:"$$$this is a test~~"}]
+app.locals.messages = [{type: "hello", string:"$$$this is a app message all user will see it~~"}]
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/passport', passport);
 app.use('/entry', entry);
+app.use('/api', api);
 
 //程序级变量可以在页面中获取
 // app.locals = {
