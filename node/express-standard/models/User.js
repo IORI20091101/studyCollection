@@ -57,6 +57,12 @@ User.prototype.hashPassword = function(fn) {
     })
 }
 
+User.prototype.toJSON = function() {
+    return {
+        id: this.id,
+        name: this.name
+    }
+}
 
 
 User.getByName = function(name, fn) {

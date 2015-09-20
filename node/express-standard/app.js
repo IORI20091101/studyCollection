@@ -11,9 +11,10 @@ var users = require('./routes/users');
 var photos = require('./routes/photos');
 var passport = require('./routes/passport');
 var entry = require('./routes/entry');
-var api = require('/routes/entry');
-
+var api = require('./routes/api');
 var User = require('./models/User');
+
+var midAuth = require('./lib/auth');
 
 var app = express();
 
@@ -38,6 +39,8 @@ app.use(cookieSession({
   keys: ['key1', 'key2']
 }))
 
+//验证登陆中间件
+app.use(midAuth.auth());
 
 app.use(function(req, res, next) {
   var uid = req.session.uid;
@@ -56,6 +59,8 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/passport', passport);
 app.use('/entry', entry);
+
+//app.use('/api', auth);
 app.use('/api', api);
 
 //程序级变量可以在页面中获取

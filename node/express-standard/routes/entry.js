@@ -28,7 +28,7 @@ router.get('/post', function(req, res) {
 
 router.post('/post',
     validate.required('title'),
-    validate.lengthAbove('title', 4),
+    validate.lengthAbove('title', 2),
     function(req, res, next) {
         console.log(123456);
         var data = req.body;
@@ -53,7 +53,11 @@ console.log(entry);
 
         entry.save(function(err) {
             if(err) return next(err);
-            res.redirect('/');
+            if( req.remoteUser ) {
+                res.json("entry add success!");
+            } else {
+                res.redirect('/');
+            }
         })
 })
 
