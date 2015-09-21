@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var cookieSession = require('cookie-session')
+var cookieSession = require('cookie-session');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -39,9 +39,11 @@ app.use(cookieSession({
   keys: ['key1', 'key2']
 }))
 
+
+app.use(midAuth.baseAuth());
 //验证登陆中间件
 app.use(midAuth.auth());
-
+/*
 app.use(function(req, res, next) {
   var uid = req.session.uid;
   if(!uid) return next();
@@ -50,7 +52,7 @@ app.use(function(req, res, next) {
     req.user = res.locals.user = user;
     next();
   })
-});
+});*/
 
 
 app.locals.messages = [{type: "hello", string:"$$$this is a app message all user will see it~~"}]
@@ -60,7 +62,6 @@ app.use('/users', users);
 app.use('/passport', passport);
 app.use('/entry', entry);
 
-//app.use('/api', auth);
 app.use('/api', api);
 
 //程序级变量可以在页面中获取

@@ -19,7 +19,7 @@ router.get('/bug', function(req, res, next) {
         domain:'chouti.com', //抓取网站的域名
         firstUrl:'http://dig.chouti.com/', //抓取的初始URL地址
         saveDir:saveDir, //抓取内容保存目录
-        debug:true, //是否开启调试模式
+        debug:true //是否开启调试模式
     };
     var o = new Robot(oOptions);
     o.crawl(); //开始抓取
