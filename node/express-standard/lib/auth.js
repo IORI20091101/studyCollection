@@ -7,7 +7,10 @@ var auth = require('basic-auth');
 exports.baseAuth = function() {
     return function(req, res, next) {
         var credentials = auth(req);
-        console.log(req.headers);
+
+        if( !credentials ) {
+            next();
+        }
         User.authenticate(credentials.name, credentials.pass, function(err, user) {
             if(err) return  next(err);
             if( !user ) {
@@ -23,7 +26,9 @@ exports.baseAuth = function() {
 exports.auth = function() {
     return function(req, res, next) {
         var credentials = auth(req);
-        if( credentials.name ) {
+
+        console.log(credentials);
+        if( credentials&&credentials.name ) {
             res.locals.user = credentials.name;
         }
 
