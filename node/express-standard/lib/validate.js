@@ -8,6 +8,7 @@ function getField(req, field) {
 exports.required = function(field) {
 
     return function(req, res, next) {
+        console.log(req);
         if( getField(req, field) ) {
             next();
         } else {
