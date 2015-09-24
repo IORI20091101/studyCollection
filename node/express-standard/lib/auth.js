@@ -7,6 +7,7 @@ exports.baseAuth = function() {
     return function(req, res, next) {
         var credentials = auth(req);
 
+        console.log("req.subdomains:" + req.subdomains);
         if( credentials ) {
             User.authenticate(credentials.name, credentials.pass, function(err, user) {
                 if(err) return  next(err);
