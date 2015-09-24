@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var auth = require('basic-auth');
 
 var validate = require('../lib/validate');
 
@@ -56,8 +55,8 @@ console.log(entry);
         entry.save(function(err) {
             if(err) return next(err);
 
-            var credentials = auth(req);
-            if( credentials.name ) {
+
+            if( req.remoteUser ) {
                 res.json("entry add success!");
             } else {
                 res.redirect('/');
