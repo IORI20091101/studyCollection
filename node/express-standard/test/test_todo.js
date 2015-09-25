@@ -21,7 +21,7 @@ function deleteTest() {
 function addTest() {
     todo.deleteAll();
     todo.add("added");
-    assert.isNotEqualTo(todo.getCount(), 0, "1 item should exists");
+    assert.notEqual(todo.getCount(), 0, "1 item should exists");
     testsCompleted++;
 }
 
@@ -36,7 +36,7 @@ function doAsyncTest(cb) {
 
 
 function throwsTest(cb) {
-    assert.throws(todo.add, /requires/);
+    assert.throws(todo.add, "requires");
     testsCompleted++;
 }
 
@@ -46,3 +46,7 @@ throwsTest();
 doAsyncTest(function() {
     console.log("complete " + testsCompleted + " tests");
 });
+
+
+
+//sudo npm install -g nodeunit
