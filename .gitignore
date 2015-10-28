@@ -35,3 +35,6 @@ node_modules
 .minify
 
 .DS_Store
+
+
+*._.editorconfig
