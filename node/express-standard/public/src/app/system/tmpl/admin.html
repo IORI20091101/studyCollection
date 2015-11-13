@@ -1,0 +1,104 @@
+
+<div class="wrapper">
+
+    <div class="row">
+        <div class="col-md-12">
+            <section class="panel">
+                <header class="panel-heading custom-tab blue-tab">
+                    <ul class="nav nav-tabs">
+                        <li class="">
+                            <a data-toggle="tab" href="#home4">
+                                <i class="fa fa-home"></i>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" href="#about4">
+                                <i class="fa fa-user"></i>
+                                About
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a data-toggle="tab" href="#contact4">
+                                <i class="fa fa-envelope-o"></i>
+                                Contact
+                            </a>
+                        </li>
+                    </ul>
+                </header>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div id="home4" class="tab-pane">
+                            Home
+                        </div>
+                        <div id="about4" class="tab-pane">About</div>
+                        <div id="contact4" class="tab-pane active">
+
+                            <div class="col-sm-12">
+                                <section class="panel">
+                                    <header class="panel-heading">
+                                        管理员用户列表
+                                    </header>
+                                    <div class="panel-body">
+                                        <div class="adv-table">
+                                            <div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline" role="grid"><table class="display table table-bordered table-striped dataTable" id="dynamic-table" aria-describedby="dynamic-table_info">
+                                                <thead>
+                                                <tr>
+                                                    <th rowspan="1" colspan="1">用户名</th>
+                                                    <th rowspan="1" colspan="1">真实姓名</th>
+                                                    <th rowspan="1" colspan="1">手机号吗</th>
+                                                    <th rowspan="1" colspan="1">状态（启用/禁用)</th>
+                                                    <th rowspan="1" colspan="1">邮箱</th>
+                                                    <th rowspan="1" colspan="1">头像</th>
+                                                    <th rowspan="1" colspan="1">角色（roleId)</th>
+                                                    <th rowspan="1" colspan="1">最近一次登录ip</th>
+                                                    <th rowspan="1" colspan="1">最近一次次登录时间</th>
+
+                                                </tr>
+                                                </thead>
+
+                                                <tfoot>
+                                                <tr>
+                                                    <th rowspan="1" colspan="1">用户名</th>
+                                                    <th rowspan="1" colspan="1">真实姓名</th>
+                                                    <th rowspan="1" colspan="1">手机号吗</th>
+                                                    <th rowspan="1" colspan="1">状态（启用/禁用)</th>
+                                                    <th rowspan="1" colspan="1">邮箱</th>
+                                                    <th rowspan="1" colspan="1">头像</th>
+                                                    <th rowspan="1" colspan="1">角色（roleId)</th>
+                                                    <th rowspan="1" colspan="1">最近一次登录ip</th>
+                                                    <th rowspan="1" colspan="1">最近一次次登录时间</th>
+
+                                                </tr>
+                                                </tfoot>
+                                                <tbody role="alert" aria-live="polite" aria-relevant="all" ng-repeat="user in users">
+                                                <tr class="gradeX odd">
+                                                    <td class=" ">{{user.userName}}</td>
+                                                    <td class=" ">{{user.realName}}</td>
+                                                    <td class=" ">{{user.phone}}</td>
+                                                    <td class=" ">{{user.enable}}</td>
+                                                    <td class=" ">{{user.email}}</td>
+                                                    <td class=" ">{{user.avatar}}</td>
+                                                    <td class=" ">{{user.roleId}}</td>
+                                                    <td class=" ">{{user.lastIp}}</td>
+                                                    <td class=" ">{{user.lastTime}}</td>
+                                                </tr>
+
+
+                                                </tbody></table><div class="row-fluid"><div class="span6"><div class="dataTables_info" id="dynamic-table_info">Showing 1 to 10 of 57 entries</div></div><div class="span6"><div class="dataTables_paginate paging_bootstrap pagination"><ul><li class="prev disabled"><a href="#">← Previous</a></li><li class="active"><a href="#">1</a></li><li><a href="#">2</a></li><li><a href="#">3</a></li><li><a href="#">4</a></li><li><a href="#">5</a></li><li class="next"><a href="#">Next → </a></li></ul></div></div></div></div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+        </div>
+    </div>
+
+</div>
+
+

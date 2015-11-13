@@ -1,0 +1,51 @@
+<div class="left-side sticky-left-side" >
+    <p>{{name}}</p>
+    <div class="logo">
+        <a href="/"><img src="/assets/img/logo.png" alt="" height="32px"></a>
+    </div>
+
+    <div class="logo-icon text-center">
+        <a href="/"><img src="/assets/img/logo_icon.png" alt=""></a>
+    </div>
+    <div class="left-side-inner">
+        <!-- visible to small devices only -->
+        <div class="visible-xs hidden-sm hidden-md hidden-lg">
+            <div class="media logged-user">
+                <img alt="" src="/assets/img/photos/user-avatar.png" class="media-object">
+
+                <div class="media-body">
+                    <h4><a href="#">John Doe</a></h4>
+                    <span>"Hello There..."</span>
+                </div>
+            </div>
+
+            <h5 class="left-nav-title">Account Information</h5>
+            <ul class="nav nav-pills nav-stacked custom-nav">
+                <li><a href="#"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                <li><a href="#"><i class="fa fa-cog"></i> <span>Settings</span></a></li>
+                <li><a href="#"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a></li>
+            </ul>
+        </div>
+
+        <!--sidebar nav start-->
+        <ul class="nav nav-pills nav-stacked custom-nav">
+            <li ng-repeat="menu in menus" ui-sref-active="active" ng-class="menu.child? 'menu-list': ''">
+                <!--如此会进行多余一次加载, 点击父菜单默认加载第一个,离开时如果在第二个菜单也会定向到第一个菜单,如此会有重复加载的问题-->
+                <a ui-sref=".{{menu.url}}"   ng-if="!menu.child">
+                    <i class="fa {{menu.icon}}"></i>
+                    <span>{{menu.name}}</span>
+                </a>
+                <a ng-if="menu.child">
+                    <i class="fa {{menu.icon}}"></i>
+                    <span>{{menu.name}}</span>
+                </a>
+                <ul class="sub-menu-list" ng-if="menu.child">
+                    <li ng-repeat="child in menu.childMenus" ui-sref-active="active"><a  ui-sref=".{{menu.url}}.{{child.url}}"> {{child.name}}</a></li>
+                </ul>
+            </li>
+        </ul>
+        <!--sidebar nav end-->
+
+    </div>
+</div>
+<!-- left side end-->

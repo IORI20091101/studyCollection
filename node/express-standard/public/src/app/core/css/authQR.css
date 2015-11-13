@@ -1,0 +1,56 @@
+body{ margin: 0; padding: 0; font-family:"Microsoft Yahei","微软雅黑";font-size: 14px; color: #666;}
+ul,li,ol{ list-style:none; padding: 0; margin: 0;}
+.blue{ color: #4385f6}
+.red{ color: #f00; font-size: 12px;}
+.p_gary{ background: #f4f4f4; padding: 10px;}
+
+.top{padding: 30px 0; background-color: #f8f8f8;}
+
+.logo {
+    width: 1000px;
+    margin: 0 auto;
+    background: url('/assets/img/bg1.jpg') 0 0 no-repeat;
+    height: 60px;
+}
+.banner{ width: 1000px; margin: 0 auto; padding: 50px 0; height:540px;}
+
+.phone {
+    float: left;
+    width: 500px;
+    background: url('/assets/img/bg1.jpg') no-repeat center -60px;
+    height: 540px;
+}
+
+.mark {
+    float: left;
+    width: 400px;
+    background: url('/assets/img/bg1.jpg') center -591px no-repeat;
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 290px
+}
+.mark h3{ font-size: 28px; padding-top: 20px; color: #34b423; font-weight: normal;}
+.main{background: #f8f8f8; padding-top: 20px;}
+.container{ width: 1000px; margin: 0 auto;}
+.container h2{ font-size: 24px; border-left:5px solid #4385f6; border-radius: 2px; padding-left: 10px; font-weight: normal; clear: both; margin: 20px 0}
+.button{ margin: 20px;}
+.button input{ width: 300px; height: 34px; line-height: 34px; padding:3px 10px; border-radius: 3px; border:1px solid #dedede; font-size: 14px;font-family:"Microsoft Yahei","微软雅黑"; vertical-align: middle;}
+.button button{ width: 100px; height: 40px; border:1px solid #45a444; background: #5db85c; font-size: 18px;font-family:"Microsoft Yahei","微软雅黑";vertical-align: middle; color: #fff}
+.button button:hover{ background: #4eb04d; cursor:pointer;}
+
+.img1 {
+    background: url('/assets//bg2.png') 0 -190px no-repeat;
+    height: 220px;
+}
+
+.img2 {
+    background: url('/assets/bg2.png') 0 0 no-repeat;
+    height: 190px;
+}
+
+.img3 {
+    background: url('/assets/bg2.png') 0 -408px no-repeat;
+    height: 300px;
+}
+.img2-txt li{ float: left; width:220px; margin:10px 35px 50px 0; text-align: center;}
+#none{ margin-right: 0px;}

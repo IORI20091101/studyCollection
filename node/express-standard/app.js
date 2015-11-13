@@ -12,6 +12,9 @@ var photos = require('./routes/photos');
 var passport = require('./routes/passport');
 var entry = require('./routes/entry');
 var api = require('./routes/api');
+var angular = require('./routes/angular');
+
+
 var User = require('./models/User');
 
 var midAuth = require('./lib/auth');
@@ -31,7 +34,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/vendor',express.static(path.join(__dirname, 'public/vendor')));
+app.use('/app',express.static(path.join(__dirname, 'public/dist/app')));
+app.use('/assets/img',express.static(path.join(__dirname, 'public/dist/assets/img')));
+app.use('/public/dist',express.static(path.join(__dirname, 'public/dist')));
+
+
+
 app.use('/tmp',express.static(path.join(__dirname, 'tmp')));
 
 app.use(cookieSession({
@@ -58,11 +67,14 @@ app.use(function(req, res, next) {
 app.locals.messages = [{type: "hello", string:"$$$this is a app message all user will see it~~"}]
 
 app.use('/', routes);
+app.use('/', angular);
+
 app.use('/users', users);
 app.use('/passport', passport);
 app.use('/entry', entry);
 
 app.use('/api', api);
+
 
 //程序级变量可以在页面中获取
 // app.locals = {

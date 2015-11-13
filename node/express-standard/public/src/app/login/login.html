@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+
+    <title>Login</title>
+
+    <link href="/app/core/css/style.css" rel="stylesheet">
+    <link href="/app/core/css/style-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/vendor/html5shiv.js"></script>
+    <script src="/vendor/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="login-body">
+
+<div class="container">
+
+    <div class="form-signin">
+        <div class="form-signin-heading text-center">
+            <h1 class="sign-title">来将通名</h1>
+            <img src="/assets/img/logo.png" height="60px" alt=""/>
+        </div>
+        <div class="login-wrap">
+
+            <!--<p>${error}</p>-->
+            <input type="text" class="form-control" name="username" placeholder="用户名" autofocus>
+            <input type="password" class="form-control" name="password" placeholder="密码">
+            <input type="text" class="form-control" name="code" placeholder="安全码" maxlength="7">
+
+            <button class="btn btn-lg btn-login btn-block" onclick="login()">
+                <i class="fa fa-check"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script src="/vendor/jquery-1.10.2.min.js"></script>
+<script src="/vendor/bootstrap.min.js"></script>
+<script src="/vendor/modernizr.min.js"></script>
+
+<script type="application/javascript">
+    function login() {
+        var username = document.querySelector("*[name=username]").value;
+        var password = document.querySelector("*[name=password]").value;
+        var code = document.querySelector("*[name=code]").value;
+        $.post("/login"
+                , {
+                    username: username,
+                    password: password,
+                    code: code
+                }
+                , function (result) {
+                    if (result.code == 200) {
+                        window.location.href = result.data;
+                    } else {
+                        alert(result.msg);
+                    }
+                });
+    }
+</script>
+
+</body>
+</html>
