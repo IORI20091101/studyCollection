@@ -20,7 +20,7 @@ target
 .project
 .classpath
 target
-*/target
+**/target
 .settings
 
 *.svn*
