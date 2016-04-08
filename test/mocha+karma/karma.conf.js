@@ -1,5 +1,18 @@
 // Karma configuration
-// Generated on Tue Apr 05 2016 17:52:17 GMT+0800 (CST)
+// Generated on Fri Apr 08 2016 15:51:49 GMT+0800 (CST)
+
+
+
+    // "karma": "^0.13.22",
+    // "chai": "^3.5.0",
+    // "mocha": "~2.3.4",
+    // "babel-core": "~6.2.1",
+    // "babel-polyfill": "^6.7.4",
+    // "babel-preset-es2015": "~6.1.18",
+    // "mochawesome": "~1.2.1",
+    // "node-fetch": "~1.3.3",
+    // "superagent": "~1.4.0",
+
 
 module.exports = function(config) {
   config.set({
@@ -10,10 +23,15 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['mocha','chai'],
 
 
     // list of files / patterns to load in the browser
+
+    // files: [
+    //     'js/**/*.js',
+    //     'test/**/*.spec.js'
+    // ],
     files: [
         'src/*.js',
         'test/*.js'
