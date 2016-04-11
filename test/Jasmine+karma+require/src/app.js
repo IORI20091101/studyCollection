@@ -1,7 +1,11 @@
-define(['src/a.js'],function() {
+define(['a'],function() {
 
-alert('app');
+    alert('app');
     function add(arg1, arg2) {
         return arg1+arg2;
     }
+
+    return {
+        add: add
+    };
 });

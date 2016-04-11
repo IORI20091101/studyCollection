@@ -20,10 +20,6 @@ module.exports = function(config) {
         // 'node_modules/requirejs/require.js',
         // 'node_modules/karma-requirejs/lib/adapter.js',
 
-        JASMINE,
-        JASMINE_ADAPTER,
-        REQUIRE,
-        REQUIRE_ADAPTER,
 
         {pattern: 'lib/**/*.js', included: false},
         {pattern: 'src/**/*.js', included: false},

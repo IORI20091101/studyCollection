@@ -7,7 +7,8 @@ requirejs.config({
     paths:{
         'jquery':'lib/jquery/dist/jquery',
         'underscore':'lib/underscore/underscore-min',
-        'app':'src/app'
+        'app':'src/app',
+        'a':'src/a'
     }
 });
 
