@@ -3,8 +3,17 @@
   "engines": {
     "node": ">=0.12.0"
   },
-  "devDependencies": {},
-  "dependencies": {
-
-  }
+  "devDependencies": {
+    "karma-requirejs": "^0.2.6",
+    "requirejs": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-jasmine": "^2.3.0",
+    "gulp-karma": "0.0.5",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^0.2.3",
+    "karma-jasmine": "^0.3.8",
+    "karma-spec-reporter": "0.0.26"
+  },
+  "dependencies": {}
 }
