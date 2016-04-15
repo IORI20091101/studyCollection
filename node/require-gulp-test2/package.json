@@ -1,0 +1,28 @@
+{
+  "name": "node",
+  "version": "0.0.1",
+  "private": "true",
+  "devDependencies": {
+    "del": "*",
+    "express": "~4.2.0",
+    "gulp": "^3.9.1",
+    "gulp-changed": "*",
+    "gulp-concat": "*",
+    "gulp-htmlmin": "*",
+    "gulp-minify-css": "*",
+    "gulp-rev-all": "*",
+    "gulp-uglify": "*",
+    "jade": "1.8.2",
+    "requirejs": "*",
+    "socket.io": "1.3.2"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {},
+  "dependencies": {
+    "underscore": "^1.8.3",
+    "moment": "^2.8.4",
+    "morgan": "~1.0.0"
+  }
+}
