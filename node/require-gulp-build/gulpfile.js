@@ -5,7 +5,6 @@ var SRC        = 'app/public' ,
 
     gulp       = require( 'gulp' ) ,
     minifyJS   = require( 'gulp-uglify' ) ,
-    minifyCSS  = require( 'gulp-minify-css' ) ,
     minifyHTML = require( 'gulp-htmlmin' ) ,
 
     //changed    = require( 'gulp-changed' ) ,
@@ -16,6 +15,7 @@ var SRC        = 'app/public' ,
 var requirejsOptimize = require('gulp-requirejs-optimize');
 var sourcemaps = require('gulp-sourcemaps');
 var sass = require('gulp-sass');
+var cleanCSS = require('gulp-clean-css');
 
 
 //执行clean命令
@@ -79,11 +79,12 @@ function compressjs() {
 
 
 function compilesass() {
-        return gulp.src(SRC + '/styles/bootstrap.scss')
+
+        return gulp.src('./app/public/styles/sass/**/*.scss')
               .pipe(sourcemaps.init())
-              .pipe(sass().on('error', sass.logError))
+              .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
               .pipe(sourcemaps.write('./maps'))
-              .pipe(gulp.dest(DEST+'/styles'));
+              .pipe(gulp.dest('./app/dest/styles'));
 }
 
 function compresscss() {
