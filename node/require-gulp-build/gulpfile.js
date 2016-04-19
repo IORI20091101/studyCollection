@@ -23,7 +23,7 @@ var  gulpSequence = require('gulp-sequence');
 var fs = require("fs");
 
 var rev = require('gulp-rev');
-var revCollector = require('gulp-rev-collector');
+var revReplace = require('gulp-rev-replace');
 
 
 //执行clean命令
@@ -63,26 +63,26 @@ gulp.task( 'compresshtml', compresshtml );
 
 gulp.task('md5',md5);
 
-gulp.task('revController', revController);
+gulp.task('revReplace',['md5'], revReplace);
 
 // 第三步：将 DIST 文件夹下的文件打上 md5 签名并输出到 CDN 文件夹,回调函数删除已修改文件名字的原始文件
 gulp.task( 'default' , function(callback) {
-    gulpSequence('clean', 'requirejs', 'compressjs','compresscss', 'compresshtml', 'md5','revController', function() {
+    gulpSequence('clean', 'requirejs', 'compressjs','compresscss', 'compresshtml', 'md5','revReplace', function() {
 
 //读取manifest路径删除被修改的文件
-        fs.readFile(DEST + '/rev-manifest.json','utf-8', function (err, data) {
-          if (err) throw err;
+        // fs.readFile(DEST + '/rev-manifest.json','utf-8', function (err, data) {
+        //   if (err) throw err;
 
-          var jsonObj = JSON.parse(data);
+        //   var jsonObj = JSON.parse(data);
 
-          var fileArr = [];
-          console.log(typeof jsonObj);
-          for( var o in jsonObj ) {
-            fileArr.push(DEST + '/' + o);
-          }
+        //   var fileArr = [];
+        //   console.log(typeof jsonObj);
+        //   for( var o in jsonObj ) {
+        //     fileArr.push(DEST + '/' + o);
+        //   }
 
-          deleteFile(fileArr);
-        });
+        //   deleteFile(fileArr);
+        // });
     });
 
 });
@@ -179,7 +179,8 @@ function md5() {
             DEST + '/vendor/**/*.js',
             DEST + '/images/**/*.{png,jpg,gif}'
         ],{
-            base: DEST,
+            base: DEST
+            /*,
             transformer: function(file) {
                 // save the old path for later
                 file.revOrigPath = file.path;
@@ -195,7 +196,7 @@ function md5() {
 console.log(filename);
                     return filename + extension;
                 });
-            }
+            }*/
         })
         .pipe( rev() )
         .pipe( gulp.dest( DEST ) )
@@ -203,16 +204,11 @@ console.log(filename);
         .pipe( gulp.dest( DEST ) );
 }
 
-function revController() {
-    return gulp.src([
-            DEST + '/**/*.json',
-            DEST + '/views/**/*.html'
-        ])
-        .pipe( revCollector({
-            replaceReved: true,
-            dirReplacements: {
-            }
-        }) )
+function revReplace() {
+    var manifest = gulp.src(DEST + "/rev-manifest.json");
+
+    return gulp.src([ DEST + '/views/**/*.html'])
+        .pipe(revReplace({manifest: manifest}))
         .pipe(gulp.dest(DEST));
 }
 
