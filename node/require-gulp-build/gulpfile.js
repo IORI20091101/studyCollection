@@ -17,7 +17,8 @@ var sourcemaps = require('gulp-sourcemaps');
 var sass = require('gulp-sass');
 var cleanCSS = require('gulp-clean-css');
 //控制task执行顺序
-var runSequence = require('run-sequence');
+var  gulpSequence = require('gulp-sequence');
+
 
 var fs = require("fs");
 
@@ -66,7 +67,7 @@ gulp.task('revController', revController);
 
 // 第三步：将 DIST 文件夹下的文件打上 md5 签名并输出到 CDN 文件夹,回调函数删除已修改文件名字的原始文件
 gulp.task( 'default' , function(callback) {
-    runSequence('clean', 'requirejs', 'compressjs','compresscss', 'compresshtml', 'md5','revController', function() {
+    gulpSequence('clean', 'requirejs', 'compressjs','compresscss', 'compresshtml', 'md5','revController', function() {
 
 //读取manifest路径删除被修改的文件
         fs.readFile(DEST + '/rev-manifest.json','utf-8', function (err, data) {
@@ -87,7 +88,7 @@ gulp.task( 'default' , function(callback) {
 });
 
 gulp.task( 'real' , function(callback) {
-    runSequence('clean', 'requirejs', 'compressjs','compresscss', 'compresshtml', 'md5','revController', function() {
+    gulpSequence('clean', 'requirejs', 'compressjs','compresscss', 'compresshtml', 'md5','revController', function() {
 
 //读取manifest路径删除被修改的文件
         fs.readFile(DEST + '/rev-manifest.json','utf-8', function (err, data) {
