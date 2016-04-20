@@ -1,12 +1,7 @@
 {
-  "scripts/boot-c5493218e3.js": "scripts/boot-c5493218e3-c5493218e3.js",
   "scripts/boot.js": "scripts/boot-c5493218e3.js",
-  "scripts/concat/router-c504e3f43c.js": "scripts/concat/router-c504e3f43c-c504e3f43c.js",
   "scripts/concat/router.js": "scripts/concat/router-c504e3f43c.js",
-  "scripts/sms/router-73545abeed.js": "scripts/sms/router-73545abeed-73545abeed.js",
   "scripts/sms/router.js": "scripts/sms/router-73545abeed.js",
-  "styles/bootstrap-b0c9cec313.css": "styles/bootstrap-b0c9cec313-b0c9cec313.css",
   "styles/bootstrap.css": "styles/bootstrap-b0c9cec313.css",
-  "vendor/base-b1268eb794.js": "vendor/base-b1268eb794-b1268eb794.js",
   "vendor/base.js": "vendor/base-b1268eb794.js"
 }

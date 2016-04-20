@@ -1,7 +1,0 @@
-{
-  "scripts/boot.js": "scripts/boot-c5493218e3.js",
-  "scripts/concat/router.js": "scripts/concat/router-c504e3f43c.js",
-  "scripts/sms/router.js": "scripts/sms/router-73545abeed.js",
-  "styles/bootstrap.css": "styles/bootstrap-48a55cfd22.css",
-  "vendor/base.js": "vendor/base-a0e40c55dc.js"
-}
