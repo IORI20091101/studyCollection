@@ -1,7 +1,16 @@
 {
-  "scripts/boot.js": "scripts/boot-c5493218e3.js",
+  "images/22.jpg": "images/22-62ae9d6352.jpg",
+  "images/bg.png": "images/bg-8dc0c4f40d.png",
+  "images/bg2.png": "images/bg2-3c96db8de5.png",
+  "images/cover.jpg": "images/cover-e6d9ff3380.jpg",
+  "images/r1.jpg": "images/r1-cc3a95877b.jpg",
+  "images/r2.jpg": "images/r2-5c866c42ce.jpg",
+  "images/yeoman.png": "images/yeoman-42092f9291.png",
+  "scripts/boot.js": "scripts/boot-874d35c5df.js",
   "scripts/concat/router.js": "scripts/concat/router-c504e3f43c.js",
   "scripts/sms/router.js": "scripts/sms/router-73545abeed.js",
   "styles/bootstrap.css": "styles/bootstrap-b0c9cec313.css",
-  "vendor/base.js": "vendor/base-b1268eb794.js"
+  "styles/chat.css": "styles/chat-d8e93697c9.css",
+  "styles/index.css": "styles/index-0ade637d07.css",
+  "vendor/base.js": "vendor/base-d91df8d10a.js"
 }

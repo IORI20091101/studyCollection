@@ -12601,12 +12601,12 @@ define('scripts/router',['backbone','jquery','scripts/core/router'],function (ba
       },
       sms: function(path) {
 
-         requirejs(['scripts/sms/router'], function( smsRouter ) {
+         requirejs(['/scripts/sms/router-73545abeed.js'], function( smsRouter ) {
                 smsRouter( path );
             });
       },
       concat: function(path) {
-         requirejs(['scripts/concat/router'], function( concatRouter ) {
+         requirejs(['/scripts/concat/router-c504e3f43c.js'], function( concatRouter ) {
                 concatRouter( path );
             });
       }

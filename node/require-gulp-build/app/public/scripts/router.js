@@ -21,12 +21,12 @@ define(['backbone','jquery','scripts/core/router'],function (backbone, jquery, l
       },
       sms: function(path) {
 
-         requirejs(['scripts/sms/router'], function( smsRouter ) {
+         requirejs(['/scripts/sms/router.js'], function( smsRouter ) {
                 smsRouter( path );
             });
       },
       concat: function(path) {
-         requirejs(['scripts/concat/router'], function( concatRouter ) {
+         requirejs(['/scripts/concat/router.js'], function( concatRouter ) {
                 concatRouter( path );
             });
       }
