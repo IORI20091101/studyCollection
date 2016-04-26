@@ -7,6 +7,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <link rel="apple-touch-startup-image" href="r1.jpg"/>
     <title></title>
+<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script>
+
+
+</script>
 
 </head>
 <body>
@@ -19,11 +23,20 @@
 
     <a href="http://www.google.com">Google</a>
 </body>
+
 <script src="http://cdn.bootcss.com/jquery/1.9.0/jquery.js"></script>
 <script>
     var $viewportMeta = $('meta[name="viewport"]');
     $('input, select, textarea').bind('focus blur', function(event) {
         $viewportMeta.attr('content', 'width=device-width, initial-scale=1, maximum-scale=' + (event.type=='blur'? 10 : 1));
     });
+
 </script>
+<script type="text/javascript">
+    console.log(12345);
+</script>
+<script type="text/javascript">
+    console.log(12345);
+</script>
+
 </html>
