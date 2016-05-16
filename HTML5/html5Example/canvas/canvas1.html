@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+    <head>
+        <title>html5</title>
+    </head>
+    <body>
+        <h1>html5效果canvas</h1>
+        <div id="support"></div>
+
+        <canvas id="trails" style="border: 1px solid;" width="500" height="500">Update your brower to enjoy canvas!</canvas>
+    </body>
+    <script src="../vendor/jquery.js"></script>
+    <script src="../vendor/underscore.js"></script>
+    <script type="text/javascript">
+        try {
+            document.createElement("canvas").getContext("2d");
+            document.getElementById("support").innerHTML="HTML5 canvas is supported in you brower.";
+        }catch(e) {
+            console.log(2323);
+            document.getElementById("support").innerHTML="HTML Canvas is not suported in you browser.";
+        }
+
+        function createCanopyPath(context) {
+
+            context.beginPath();
+            context.moveTo(-25, -50);
+            context.lineTo(-10, -80);
+            context.lineTo(-20, -80);
+            context.lineTo(-5, -110);
+            context.lineTo(-15, -110);
+
+            context.lineTo(0, -140);
+            context.lineTo(15, -110);
+            context.lineTo(5, -110);
+            context.lineTo(20, -80);
+            context.lineTo(10, -80);
+            context.lineTo(25, -50);
+
+            context.closePath();
+
+        }
+
+        function drawTrails() {
+            var canvas = document.getElementById('trails');
+            var context = canvas.getContext("2d");
+
+            context.save();
+
+            context.translate(130,250);
+
+            createCanopyPath(context);
+
+
+            context.fillStyle="#339900";
+
+            context.fill();
+
+            context.stroke();
+
+
+            context.lineWidth=4;
+
+            context.lineJoin = 'round';
+
+            context.strokeStyle = '#663300';
+
+
+            context.fillStyle='#663300';
+            context.fillRect(-5,-50,10,50);
+
+            context.stroke();
+
+            context.restore();
+
+
+
+            context.translate(-10,350);
+
+            context.beginPath();
+
+            context.moveTo(0,0);
+            context.quadraticCurveTo(170, -50, 260, -190);
+
+            context.quadraticCurveTo(310, -250, 410, -250);
+
+            context.strokeStyle='#663300';
+            context.lineWidth=20;
+            context.stroke();
+
+            context.restore();
+
+
+
+
+
+
+
+
+
+            // context.lineWidth = 4;
+
+            // context.lineJoin = 'round';
+
+            // context.strokeStyle='#663300';
+
+            // context.fillStyle="#339900";
+
+            // context.save();
+
+            // context.translate(130,250);
+            // createCanopyPath(context);
+
+
+            //context.stroke();
+            //context.restore();
+
+
+            // context.fillStyle="#663300";
+            // context.fill();
+
+
+
+            // context.fillRect(-5,-50,10,50);
+
+
+            // context.save();
+
+            // context.translate(-10,350);
+            // context.beginPath();
+
+            // context.moveTo(0,0);
+            // context.quadraticCurveTo(170, -50, 260, -190);
+
+            // context.quadraticCurveTo(310, -250, 410, -250);
+
+            // context.strokeStyle='#663300';
+            // context.lineWidth=20;
+
+
+            // context.stroke();
+            // context.restore();
+        }
+
+        window.addEventListener("load", drawTrails, true);
+    </script>
+</html>
