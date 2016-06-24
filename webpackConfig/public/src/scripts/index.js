@@ -1,7 +1,7 @@
 /**
  * Created by sundongzhi on 16/6/23.
  */
-require("./style.css");
+require("../styles/style.css");
 
 require('./lib.js')
 console.log("has into index~~~");
