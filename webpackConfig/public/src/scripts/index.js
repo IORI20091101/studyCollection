@@ -3,8 +3,8 @@
  */
 require("../styles/style.css");
 
-require('./lib.js')
-console.log("has into index~~~");
+console.log("has into index~~~ we has abcontents!");
+
 document.write("It works.");
 
 document.write("111");

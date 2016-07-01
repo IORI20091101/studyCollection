@@ -1,17 +1,22 @@
 /**
  * Created by sundongzhi on 16/6/23.
  */
-var webpack = require('webpack');
-var path = require("path");
+'use strict'
+let webpack = require('webpack');
+let path = require("path");
 
-var glob = require("glob");
+let glob = require("glob");
 
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+let ExtractTextPlugin = require('extract-text-webpack-plugin')
+let HtmlWebpackPlugin = require('html-webpack-plugin');
 
-console.log(path.join(__dirname,"public/dist/scripts"));
+let CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
 
-let srcDir = path.resolve(process.cwd(), 'public','src')
 
+console.log(path.resolve(__dirname,"public/dist/scripts"));
+
+let srcDir = path.join(process.cwd(), 'public','src')
+let distDir = path.join(process.cwd(), 'public', 'dist');
 
 let entries = (() => {
         let jsDir = path.resolve(srcDir, 'scripts')
@@ -19,16 +24,18 @@ let entries = (() => {
         let map = {}
 
         entryFiles.forEach((filePath) => {
-        let filename = filePath.substring(filePath.lastIndexOf('\/') + 1, filePath.lastIndexOf('.'))
-        map[filename] = filePath
-    })
-
-return map
+            let filename = filePath.substring(filePath.lastIndexOf('\/') + 1, filePath.lastIndexOf('.'))
+            map[filename] = filePath
+        })
+    return map
 })()
 
 
+
+
+
 let plugins = (() => {
-    let entryHtml = glob.sync(srcDir + '/views/*.html')
+    let entryHtml = glob.sync(path.join(srcDir,'views') + '/*.html')
     let r = []
 
     entryHtml.forEach((filePath) => {
@@ -43,29 +50,40 @@ let plugins = (() => {
             conf.chunks = ['vender', 'common', filename]
         }
 
-        if(/b|c/.test(filename)) conf.chunks.splice(2, 0, 'common-b-c')
-
         r.push(new HtmlWebpackPlugin(conf))
     })
 
     return r
 })()
 
+
+let publicPath = '/'
+let extractCSS
+let cssLoader
+let sassLoader
+extractCSS = new ExtractTextPlugin('css/[name].css?[contenthash]')
+cssLoader = extractCSS.extract(['css'])
+sassLoader = extractCSS.extract(['css', 'sass'])
+plugins.push(extractCSS, new webpack.HotModuleReplacementPlugin())
+
+
 console.log(plugins);
 
 module.exports = {
-    entry: {
-        index: path.join(__dirname,"public/src/scripts/index.js"),
-        vendor: [
-            path.join(__dirname,"public/vendor/jquery/dist/jquery.js"),
-            path.join(__dirname,"public/vendor/lodash/dist/lodash.js")
+    entry: Object.assign(entries, {
+        // 用到什么公共lib（例如React.js），就把它加进vender去，目的是将公用库单独提取打包
+        'vender': [
+            path.resolve(__dirname,"public/vendor/jquery/dist/jquery.js"),
+            path.resolve(__dirname,"public/vendor/lodash/dist/lodash.js")
         ]
-    },
+    }),
     output: {
-        path: __dirname+"/public/dist",
-        filename: "[name].[chunkhash:8].js",
-        chunkFilename: "[id].[chunkhash:8].bundle.js",
-        publicPath: "/"
+        path: path.resolve(__dirname , "public/dist"),
+        filename: "[name].js",
+        chunkFilename: "[chunkhash:8].chunk.js",
+        hotUpdateChunkFilename: '[id].js',
+        publicPath: "/",
+        sourceMapFilename: './source.map'
     },
     module: {
         loaders: [
@@ -73,13 +91,17 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
+        // new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
         // new HtmlWebpackPlugin({
         //     filename: 'index.html',
         //     template: 'html!./public/src/views/index.html',
         //     inject: 'body',
         //     chunks: ['vendor']
         // })
+        new CommonsChunkPlugin({
+            name: 'common',
+            chunks: ['a', 'b']
+        })
 
     ].concat(plugins)
 };
