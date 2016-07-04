@@ -4,21 +4,32 @@
   "description": "",
   "main": "bundle.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server/app.js"
+  },
+  "localServer": {
+    "port": 3010
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "css-loader": "^0.23.1",
     "html-webpack-plugin": "^2.21.0",
+    "koa-ejs": "^3.0.0",
+    "koa-proxy": "^0.6.0",
+    "koa-router": "^5.4.0",
+    "koa-static": "^2.0.0",
+    "open": "0.0.5",
     "path": "^0.12.7",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "webpack-hot-middleware": "^2.12.0"
   },
   "dependencies": {
     "extract-text-webpack-plugin": "^1.0.1",
     "glob": "^7.0.5",
     "html-loader": "^0.4.3",
-    "html-webpack-plugin": "^2.21.0"
+    "html-webpack-plugin": "^2.21.0",
+    "koa": "^1.2.0"
   }
 }
