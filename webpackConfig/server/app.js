@@ -9,11 +9,12 @@ let open = require('open');
 
 
 let pkg = require('../package.json');
+
 let env = process.argv[2] || process.env.NODE_ENV;
 
 let debug  = 'production' !== env;
 
-let staticDir = path.resolve(__dirname, '../public/dist');
+let staticDir = path.resolve(__dirname, '../public/' + (debug ? 'src' : 'dist'));
 
 var routes = require('./routes');
 
@@ -47,6 +48,23 @@ app.use(function*(next) {
 routes(router, app, staticDir)
 app.use(router.routes());
 
+
+if(debug) {
+    let webpackDevMiddleware = require('koa-webpack-dev-middleware');
+    let webpack = require('webpack');
+    let webpackConf = require('../webpack.config')();
+    let compiler = webpack(webpackConf);
+    
+    app.use(webpackDevMiddleware(compiler, webpackConf.devServer));
+    
+    let hotMiddleware = require("webpack-hot-middleware")(compiler);
+    
+    app.use(function*(next) {
+        "use strict";
+        yield hotMiddleware.bind(null, this.req, this.res);
+        yield next;
+    })
+}
 
 
 app.use(serve(staticDir, {

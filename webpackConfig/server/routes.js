@@ -7,12 +7,14 @@ const fs = require('fs');
 
 const render = require('koa-ejs');
 
+const path = require('path');
+
 const proxy = require('koa-proxy');
 
 const list = require('../mock/list');
 
 module.exports = (router, app, staticDir) => {
-    router.get('/api/list', function*() {
+    router.get('/mock/api/list', function*() {
         let query = this.query || {};
         let offset = query.offset || 0;
         let limit = query.limit || 10;
@@ -37,7 +39,7 @@ module.exports = (router, app, staticDir) => {
     });
 
 
-    router.get('/api/foo/bar', proxy({host: 'http://foo.bar.com'}));
+    router.get('/api/list', proxy({host: 'http://localhost:3010/'}));
 
     render(app, {
         root: __dirname,
@@ -48,10 +50,12 @@ module.exports = (router, app, staticDir) => {
     });
 
     router.get('/', function*() {
-        let pages = fs.reddirSync(staticDir);
+        let pages = fs.readdirSync( path.join(staticDir ,'views'));
         pages = pages.filter((page) => {
-            return /\.html&/.test(page);
+            return /\.html$/.test(page);
         })
+
+        console.log(pages);
 
         yield this.render('home', {pages: pages|| []});
     })

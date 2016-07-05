@@ -1,0 +1,7 @@
+{
+  "jquery": "vendor/jquery/dist/jquery.js",
+
+  "lodash": "vendor/lodash/dist/lodash.js"
+
+}
+
