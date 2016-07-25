@@ -11,6 +11,6 @@ $(function() {
         {title:"javascript the good part", author: 'Douglas Crockford', releaseDate: '2008', keywords: 'javascript programming'},
     ];
 
-
-    new app.LibraryView(books);
+    app.MainRouter = new app.Router();
+    Backbone.history.start({pushState: true, root: '/'});
 })

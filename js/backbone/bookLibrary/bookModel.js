@@ -13,7 +13,8 @@ db.once('open', function(callback) {
 var Book = new mongoose.Schema({
     title: String,
     author: String,
-    releaseData: Date
+    releaseDate: String,
+    keywords: String
 });
 
 

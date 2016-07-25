@@ -40,7 +40,18 @@
 
 
 
-
+        <% for(var i=0; i<books.length; i++) {%>
+        <div class="bookContainer" id="<%= books[i]._id %>">
+            <img src="/img/a.jpg"/>
+            <ul>
+                <li>Title :  <%= books[i].title %></li>
+                <li>Author : <%= books[i].author %></li>
+                <li>releaseDate : <br/> <%= books[i].releaseDate %></li>
+                <li>Keywords : <%= books[i].keywords %></li>
+            </ul>
+            <button class="delete">Delete</button>
+        </div>
+        <% } %>
 
 
 

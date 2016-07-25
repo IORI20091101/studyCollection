@@ -9,10 +9,11 @@ app.BookView = Backbone.View.extend({
 
     className: "bookContainer",
 
-    template: _.template( $('#bookTemplate').html() ),
+    template: Handlebars.compile( $('#bookTemplate').html() ),
 
     events: {
-      'click .delete': 'deleteBook'
+        'click .delete': 'deleteBook', 
+        'click .bookInnerCon': 'clickItem'
     },
 
     render: function() {
@@ -21,7 +22,22 @@ app.BookView = Backbone.View.extend({
     },
 
     deleteBook: function() {
-        this.model.destroy();
-        this.remove();
+        var self = this;
+        console.log(this.model);
+        this.model.destroy({success: function(model, response) {
+            console.log(response);
+            if(response.code == 200) {
+                self.remove();
+            } else {
+                alert("删除失败,请稍后重试!");
+            }
+        }});
+    },
+
+    clickItem: function(e) {
+        var id =$(e.target).parent('.bookInnerCon').prop("id");
+        if( id ) {
+            app.MainRouter.navigate("/main/books/" + id);
+        }
     }
 });

@@ -36,6 +36,7 @@ app.use(function*(next) {
 });
 
 
+
 // logger
 app.use(function*(next) {
     console.log(this.method, this.url)
@@ -50,6 +51,7 @@ app.use(function*(next) {
 //    }
 //    yield next;
 //});
+
 
 
 routes(router, app, staticDir);
