@@ -10,12 +10,21 @@ db.once('open', function(callback) {
 
 })
 
+var Promise = mongoose.Promise;
+
 var Book = new mongoose.Schema({
     title: String,
     author: String,
     releaseDate: String,
     keywords: String
 });
+
+Book.methods.updateBook = function() {
+    var self = this;
+    var p = new Promise();
+
+    self.update({})
+}
 
 
 var BookModel = mongoose.model('Book', Book);

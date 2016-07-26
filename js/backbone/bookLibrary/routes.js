@@ -100,30 +100,45 @@ module.exports = (router, app, staticDir) => {
     });
 
 
-    router.put('/api/books/:id', function *(next) {
-        console.log(this.params);
-        var params = this.params;
-        if(id) {
-            BookModel.update({_id: ObjectId(id)}, {
-                $set: {
-                    title: params.title,
-                    author: params.author,
-                    coverImage: params.coverImage,
-                    releaseDate: params.releaseDate,
-                    keywords: params.keywords,
-                }
-            }, function(err) {
-                if( err ) {
-                    self.body = err;
-                }
-                var obj = {};
-                obj.code = 200;
-                obj.msg = "删除成功";
-                self.body = obj;
-            });
-        }
+    router.put(
+        '/api/books/:id',
+        function *(next) {
+            var id = this.params.id;
+            var params = this.request.body;
+            var self = this;
+            self.obj = {};
+            if(id) {
+                this.updateRes = BookModel.update({_id: id}, {
+                    $set: {
+                        title: params.title,
+                        author: params.author,
+                        coverImage: params.coverImage,
+                        releaseDate: params.releaseDate,
+                        keywords: params.keywords
+                    }
+                }, function(err) {
+                    if (err) {
+                        self.obj.code = 500;
+                        self.obj.msg = "更新失败";
+                        console.log('更新失败');
+                    }
+                    console.log('数据更新成功');
+                    self.obj.code = 200;
+                    self.obj.msg = "更新成功";
 
-    });
+                    return self.obj;
+                });
+            } else {
+                console.log('id不存在');
+            }
+
+            yield next;
+
+        }, function *(next) {
+            console.log('you has return to page');
+            this.body = this.obj;
+
+        });
 
     router.delete(
         '/api/books/:id', function *(next) {

@@ -33,7 +33,15 @@
 
 
 
+<div class="background-container">
+    <div class="bg-dy1">
 
+    </div>
+    <div class="bg-dy2" style="background-position: 0px 0px;">
+
+    </div>
+
+</div>
 
 
 
@@ -55,7 +63,7 @@
             <label for="keywords">Keywords : </label>
             <input id="keywords" type="text"  name="keywords"  value="{{keywords}}"/>
 
-            <button id="update">update</button>
+            <button id="update" >update</button>
         </div>
     </form>
 </script>
@@ -88,5 +96,15 @@
 
 <script src="/js/app.js"></script>
 
+
+<script type="text/javascript">
+    $(function(){
+        window.onscroll = function(){
+            //console.log($(document).scrollTop()+"px")
+            $('.background-container .bg-dy2').css('backgroundPosition','0 '+$(document).scrollTop()+"px");
+        }
+
+    })
+</script>
 
 </body></html>

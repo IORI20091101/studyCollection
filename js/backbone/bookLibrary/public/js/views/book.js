@@ -37,7 +37,9 @@ app.BookView = Backbone.View.extend({
     clickItem: function(e) {
         var id =$(e.target).parent('.bookInnerCon').prop("id");
         if( id ) {
-            app.MainRouter.navigate("/main/books/" + id);
+            app.MainRouter.navigate("main/books/" + id,  {trigger: true});
+        } else {
+            alert('id not exist!')
         }
     }
 });
