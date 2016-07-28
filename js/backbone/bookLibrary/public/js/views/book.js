@@ -13,7 +13,7 @@ app.BookView = Backbone.View.extend({
 
     events: {
         'click .delete': 'deleteBook', 
-        'click .bookInnerCon': 'clickItem'
+        'click .update': 'clickItem'
     },
 
     render: function() {
@@ -35,7 +35,8 @@ app.BookView = Backbone.View.extend({
     },
 
     clickItem: function(e) {
-        var id =$(e.target).parent('.bookInnerCon').prop("id");
+        var id = this.model.id;
+console.log(id);
         if( id ) {
             app.MainRouter.navigate("main/books/" + id,  {trigger: true});
         } else {
