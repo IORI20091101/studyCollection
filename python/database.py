@@ -38,7 +38,7 @@ def enter_command() :
 
 
 def main() :
-    database = shelve.open('c:\\database.dat')  # You may want to change this name
+    database = shelve.open('database.dat')  # You may want to change this name
     try: 
         while True:
 	    cmd = enter_command()
