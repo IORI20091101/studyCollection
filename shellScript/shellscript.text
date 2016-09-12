@@ -1,0 +1,5 @@
+shell的计算可以有以下方式
+
+1，$(( ${first}*${first} ))
+2, declare -i total = ${first}*${last}
+3, "144/12"|bc
