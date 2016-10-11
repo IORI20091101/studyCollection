@@ -7,6 +7,6 @@ def blocks(file):
 	for line in lines(file):
 		if line.strip():
 			block.append(line)
-		elseif block:
+		elif block:
 			yield ''.join(block).strip()
 			block = []
